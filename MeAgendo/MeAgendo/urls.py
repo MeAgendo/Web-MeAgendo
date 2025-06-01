@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from comments.views import test_template_view
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('test/', test_template_view, name='test-template'),
+    path('', test_template_view, name='home'),  # Ruta para la página principal
 ]
