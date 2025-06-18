@@ -1,0 +1,149 @@
+<!--{% load static %}-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap" rel="stylesheet">
+    <!--cdn fast awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!--ruta para live server-->
+    <script src="../static/js/"></script>
+    <link rel="stylesheet" href="../static/css/calendario.css">
+    <title>MeAgendo</title>
+</head>
+<body>
+    <div class="container">
+        <aside class="left-panel">
+            <h1 class="Nombre-web">MeAgendo</h1>
+            <nav class=>
+                <ul>
+                    <li><a href="#">Calendario</a></li>
+                    <li><a href="#">Configuración</a></li>
+                </ul>
+            </nav>
+            <a href="#"><i class="fa-solid fa-right-to-bracket"></i> Cerrar Sesión</a>
+        </aside>
+
+        <main>
+            <header>
+                <p>¡ Bienvenido, {{name}} !</p>
+                <details>
+                    <summary><i class="fas fa-plus"></i></summary>
+                    <ul>
+                        <li><a href="#">Tarea <i class="fa-solid fa-check"></i></a></li>
+                        <li><a href="#">Evento <i class="fa-regular fa-calendar"></i></a></li>
+                    </ul>
+                </details>
+            </header>
+
+            <div class="calendar-container">
+                <nav class="calendar-header">
+                    <div class="header-left">
+                        <button id="prevMonth"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button id="nextMonth"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                    <div class="header-center">
+                        <h2 id="currentMonth">Junio 2025</h2>
+                    </div>
+                    <div class="header-right">
+                        <button id="viewMonth">Mes</button>
+                        <button id="viewWeek">Semana</button>
+                        <button id="viewDay">Día</button>
+                    </div>
+                </nav>
+                <section class="calendar-content">
+                    <ul class="row-days">
+                        <li>Dom</li> <li>Lun</li> <li>Mar</li> <li>Mié</li> <li>Jue</li> <li>Vie</li> <li>Sáb</li>
+                    </ul>
+                    <div class="calendar-days">
+                        <ul>
+                            <li class="prevMonth-day" data-day="31">31</li>
+                            <li class="day" data-day="1">1</li>
+                            <li class="day" data-day="2">2</li>
+                            <li class="day" data-day="3">3</li>
+                            <li class="day" data-day="4">4</li>
+                            <li class="day" data-day="5">5</li>
+                            <li class="day" data-day="6">6</li>
+                            <li class="day" data-day="7">7</li>
+                            <li class="day" data-day="8">8</li>
+                            <li class="day" data-day="9">9</li>
+                            <li class="day" data-day="10">10</li>
+                            <li class="day" data-day="11">11</li>
+                            <li class="day" data-day="12">12</li>
+                            <li class="day" data-day="13">13</li>
+                            <li class="day" data-day="14">14</li>
+                            <li class="day" data-day="15">15</li>
+                            <li class="day" data-day="16">16</li>
+                            <li class="actual-day" data-day="17">17</li>
+                            <li class="day" data-day="18">18</li>
+                            <li class="day" data-day="19">19</li>
+                            <li class="day" data-day="20">20</li>
+                            <li class="day" data-day="21">21</li>
+                            <li class="day" data-day="22">22</li>
+                            <li class="day" data-day="23">23</li>
+                            <li class="day" data-day="24">24</li>
+                            <li class="day" data-day="25">25</li>
+                            <li class="day" data-day="26">26</li>
+                            <li class="day" data-day="27">27</li>
+                            <li class="day" data-day="28">28</li>
+                            <li class="day" data-day="29">29</li>
+                            <li class="day" data-day="30">30</li>
+                            <li class="nextMonth-day" data-day="1">1</li>
+                            <li class="nextMonth-day" data-day="2">2</li>
+                            <li class="nextMonth-day" data-day="3">3</li>
+                            <li class="nextMonth-day" data-day="4">4</li>
+                            <li class="nextMonth-day" data-day="5">5</li>
+                            <li class="nextMonth-day" data-day="6">6</li>
+                            <li class="nextMonth-day" data-day="7">7</li>
+                            <li class="nextMonth-day" data-day="8">8</li>
+                            <li class="nextMonth-day" data-day="9">9</li>
+                            <li class="nextMonth-day" data-day="10">10</li>
+                            <li class="nextMonth-day" data-day="11">11</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+
+        <aside class="right-panel">
+            <header class="main-header">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar..." id="searchInput">
+                    <button id="searchButton"><i class="fa-solid fa-search"></i></button>
+                </div>
+
+                <details class="user-menu">
+                    <summary><i class="fa-solid fa-user"></i></summary>
+                    <ul>
+                        <li><a href="#">Perfil</a></li>
+                        <li><a href="#">Configuración</a></li>
+                        <li><a href="#">Cerrar sesión</a></li>
+                    </ul>
+                </details>
+            </header>
+            <div class="info-section">
+                <h3 id="info-title">Título de la tarea/evento</h3>
+                <p id="info-description">Descripción breve sobre la actividad.</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+            </div>
+            <div class="mini-calendar">
+                <h4>Hoy</h4>
+                <p id="mini-date">Martes, 17 de Junio</p>
+                <ul class="mini-days">
+                    <li class="mini-day prev-day">16</li>
+                    <li class="mini-day actual-day">17</li>
+                    <li class="mini-day next-day">18</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</body>
+
+</html>
