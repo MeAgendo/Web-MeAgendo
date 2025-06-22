@@ -104,61 +104,98 @@ main {
     align-items:stretch;
     padding: 10px;
 }
-/*cabecera del main*/
-main header{
+/* cabecera del main */
+main header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-main header p{
-    font-size: 36px;
-    padding: 10px;
-    font-weight: 600;
-}
-main header summary {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    font-size: 36px;
-    padding: 12px;
-    min-width: 50px; /* Fija un ancho mínimo para evitar que se mueva */
-}
-main header details[open] summary {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    font-size: 36px;
-    padding: 30px 12px;
-    min-width: 50px;
-    height: 50px;
-    overflow: hidden;
-}
-main header ul{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-main header ul li{
-    display: flex;
-    flex-direction: column;
-    font-size: 20px;
-    font-weight: 400;
-    background-color: #838080;
-    padding:4px 10px;
-    border-radius: 8px;
-    gap: 10px;
+    padding-top: 20px;
 }
 
-/*contenedor general del calendario*/
+/* título */
+main header p {
+    font-size: 36px;
+    
+    font-weight: 600;
+}
+
+/* contenedor details */
+main header details {
+    position: relative;
+}
+
+main header details summary {
+    /* igual alto que el <p> de 36px + 2×10px padding = 56px */
+    width: 46px;
+    height: 46px;
+    background-color: #575757;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #000;
+    font-size: 1.75rem;
+}
+
+main header details summary::-webkit-details-marker {
+    display: none;
+}
+
+main header details summary:hover {
+    background-color: #357ab8;
+}
+
+main header details[open] summary {
+    background-color: #357ab8;
+}
+
+
+/* menú desplegable */
+main header ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 0;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;                      /* más separación vertical */
+    list-style: none;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+main header ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;                      /* espacio entre icono y texto */
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #f0f0f0;        /* fondo claro */
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;             /* forma “píldora” */
+    cursor: pointer;
+}
+
+main header ul li:hover {
+    background-color: #e0e0e0;
+}
+
+/* contenedor general del calendario */
 .calendar-container {
     width: 100%;
-    height: auto;
-    overflow: hidden; /* Evita que el contenido se desborde */
+    height: 80%;
+    overflow: visible;     /* permite que crezca libremente */
+    box-sizing: border-box;
 }
-/*cabecera calendario principal*/
-.calendar-header{
+
+
+/* cabecera calendario principal */
+.calendar-header {
     background-color: aliceblue;
-    height: auto;
+    height: 10%;
     width: 100%;
     padding: 10px;
     display: flex;
@@ -166,7 +203,8 @@ main header ul li{
     align-items: center;
     justify-content: space-between;
 }
-.calendar-header .header-left{
+
+.calendar-header .header-left {
     display: flex;
     width: auto;
     justify-content: flex-start;
@@ -175,15 +213,17 @@ main header ul li{
     border-radius: 4px;
     padding: 4px;
 }
-.calendar-header .header-center{
+
+.calendar-header .header-center {
     display: flex;
     flex: 1;
-    justify-content:center;
+    justify-content: center;
     align-items: center;
     margin-left: 20%;
     margin-right: 10%;
 }
-.calendar-header .header-right{
+
+.calendar-header .header-right {
     display: flex;
     width: auto;
     justify-content: flex-end;
@@ -192,35 +232,282 @@ main header ul li{
     border-radius: 4px;
     padding: 4px;
 }
-/*barra superior dias calendario principal*/
+.calendar-content {
+    margin-top: 10px;
+    width: 100%;
+    height: 88%;
+    display: flex;             /* convierte en flex-col */
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* fila de cabecera: se mantiene arriba */
 .row-days {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(7, 1fr); 
-    text-align: start; 
+    grid-template-columns: repeat(7, 1fr);
+    text-align: start;
     color: #838080;
     padding: 5px;
+    flex: 0 0 auto;            /* no crece, no encoge */
 }
-/*conjuntos de filas-columnas de dias calendario principal*/
+
+/* contenedor de los días: ocupa todo el espacio restante */
+.calendar-days {
+    flex: 1 1 auto;            /* crece para rellenar */
+    min-height: 0;             /* permite que el flex encoja */
+    box-sizing: border-box;
+}
+
+/* la grilla dentro rellena el alto de .calendar-days */
 .calendar-days ul {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columnas iguales */
-    gap: 5px; /* Espacio entre los días */
-    list-style: none;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 1fr;       /* cada fila igual de alta */
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
 }
-/*cada dia del calendario principal*/
+
+/* celdas sin altura fija; el grid controla el tamaño */
 .calendar-days ul li {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    width: 100%;
-    height: 95px; /* Ajusta la altura según lo necesites */
+    padding: 4px;
     border: 1px solid #ccc;
-    font-size: 16px;
-    padding: 5px;
+    box-sizing: border-box;
 }
-.right-panel{
+
+/* PANEL DERECHO */
+.right-panel {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    width: 20%;
+    padding-top: 12px;
+    /* elimina width:20% */
+    flex: 0 0 280px;       /* ancho fijo de 280px */
+    max-width: 280px;
     background-color: #f4f4f4;
+    box-sizing: border-box;
+}
+
+
+.right-panel .main-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    gap: 0.5rem;
+}
+
+.right-panel .main-header .search-box {
+    position: relative;
+    flex: 1;
+}
+
+.right-panel .main-header .search-box input {
+    width: 100%;
+    padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+.right-panel .main-header .search-box button {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.right-panel .main-header .search-box button:hover {
+    color: #000;
+}
+
+.right-panel .main-header .search-box input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 3px rgba(74,144,226,0.5);
+}
+
+.right-panel .main-header .user-menu {
+    position: relative;
+}
+
+.right-panel .main-header .user-menu summary {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.right-panel .main-header .user-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.right-panel .main-header .user-menu ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 0;
+    padding: 0.5rem 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    list-style: none;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.right-panel .main-header .user-menu ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #333;
+    text-decoration: none;
+}
+
+.right-panel .main-header .user-menu ul li a:hover {
+    background: #f0f0f0;
+}
+
+/* Panel derecho: sección de información */
+.right-panel .info-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
+    margin: 0.75rem 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#info-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+#info-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .progress {
+    height: 100%;
+    width: var(--progress, 0%);
+    background-color: #4a90e2;
+    transition: width 0.3s ease;
+}
+
+/*Mini calendario*/
+.right-panel .mini-calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    margin: 0.75rem 1rem;               /* mismos márgenes que .info-section */
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 2rem);           /* ancho completo menos márgenes */
+    flex: 0 0 auto;                     /* no estira, respeta su contenido */
+    box-sizing: border-box;
+}
+
+
+.mini-calendar .mini-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.mini-calendar .mini-header button {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.mini-calendar .mini-header button:hover {
+    color: #000;
+}
+
+.mini-calendar #mini-date {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.mini-calendar .calendar-content.mini {
+    width: 100%;
+}
+
+.mini-calendar .row-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+    color: #838080;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.mini-calendar .calendar-days ul {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mini-calendar .calendar-days ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+.mini-calendar .calendar-days ul li.prevMonth-day,
+.mini-calendar .calendar-days ul li.nextMonth-day {
+    color: #ccc;
+}
+
+.mini-calendar .calendar-days ul li.actual-day {
+    background: #4a90e2;
+    color: #fff;
+    font-weight: bold;
 }
