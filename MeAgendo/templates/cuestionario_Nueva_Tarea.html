@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nueva Tarea</title>
+        <!--Google fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap" rel="stylesheet">
+        <!--cdn fast awesome-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    </head>
+    <body>
+        <div class="container nueva-tarea-page">
+            <!-- Header -->
+            <header class="nt-header">
+                <button type="button" class="nt-close-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1 class="nt-title">Nueva Tarea</h1>
+            </header>
+
+            <!-- Formulario -->
+            <form class="nt-form">
+                <!-- Fecha límite -->
+                <div class="nt-form-group">
+                    <label for="fecha-limite" class="nt-label">
+                        <i class="fas fa-calendar-alt nt-icon"></i>
+                        Fecha límite
+                    </label>
+                    <input
+                        type="date"
+                        id="fecha-limite"
+                        name="fecha-limite"
+                        class="nt-input"
+                        placeholder="dd/mm/aaaa"
+                    />
+                </div>
+
+                <!-- Título -->
+                <div class="nt-form-group">
+                    <label for="titulo" class="nt-label">Agregar título</label>
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        class="nt-input"
+                        placeholder="Escribe un título"
+                    />
+                </div>
+
+                <!-- Descripción -->
+                <div class="nt-form-group">
+                    <label for="descripcion" class="nt-label">
+                        <i class="fas fa-align-left nt-icon"></i>
+                        Agregar descripción (opcional)
+                    </label>
+                    <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        class="nt-textarea"
+                        rows="3"
+                        placeholder="Escribe una descripción"
+                    ></textarea>
+                </div>
+
+                <!-- Plazo de tiempo -->
+                <div class="nt-form-group">
+                    <label for="plazo-tiempo" class="nt-label">
+                        <i class="fas fa-hourglass-half nt-icon"></i>
+                        Plazo de tiempo
+                    </label>
+                    <select
+                        id="plazo-tiempo"
+                        name="plazo-tiempo"
+                        class="nt-select"
+                    >
+                        <option value="">Seleccionar</option>
+                        <option value="hoy">Hoy</option>
+                        <option value="semana">Esta semana</option>
+                        <option value="mes">Este mes</option>
+                    </select>
+                </div>
+
+                <!-- Prioridad -->
+                <div class="nt-form-group nt-prioridad-group">
+                    <span class="nt-label">Nivel de prioridad</span>
+                    <div class="nt-prioridad-options">
+                        <input
+                            type="radio"
+                            id="prioridad-alta"
+                            name="prioridad"
+                            value="alta"
+                        />
+                        <label
+                            for="prioridad-alta"
+                            class="nt-prioridad-label"
+                        >
+                            Alta
+                        </label>
+
+                        <input
+                            type="radio"
+                            id="prioridad-media"
+                            name="prioridad"
+                            value="media"
+                        />
+                        <label
+                            for="prioridad-media"
+                            class="nt-prioridad-label"
+                        >
+                            Media
+                        </label>
+
+                        <input
+                            type="radio"
+                            id="prioridad-baja"
+                            name="prioridad"
+                            value="baja"
+                        />
+                        <label
+                            for="prioridad-baja"
+                            class="nt-prioridad-label"
+                        >
+                            Baja
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botón Crear -->
+                <div class="nt-form-group nt-submit-group">
+                    <button type="submit" class="nt-btn-crear">
+                        CREAR
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
