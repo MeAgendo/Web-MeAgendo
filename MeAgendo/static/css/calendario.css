@@ -7,8 +7,6 @@ html, body {
     height: 100vh;
 }
 body{
-    display: flex;
-    flex-direction: column;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
@@ -50,13 +48,13 @@ a{
     align-items: center;
     justify-content: space-between;
     flex: 1;
-    gap: 10px;
+    gap: 0.2rem;
 }
 .left-panel {
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 15%;
+    width: 11%;
     background-color: #f4f4f4;
     align-items: center;
     justify-content: center;
@@ -96,7 +94,7 @@ a{
 }
 main {
     height: 100%;
-    width: 65%;
+    width: 70%;
     background-color: #c5c5c5;
     display: flex;
     flex-direction: column;
@@ -287,12 +285,9 @@ main header ul li:hover {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 18%;
     padding-top: 12px;
-    /* elimina width:20% */
-    flex: 0 0 280px;       /* ancho fijo de 280px */
-    max-width: 280px;
     background-color: #f4f4f4;
-    box-sizing: border-box;
 }
 
 
@@ -313,7 +308,6 @@ main header ul li:hover {
 .right-panel .main-header .search-box input {
     width: 100%;
     padding: 0.5rem 2.5rem 0.5rem 0.75rem;
-    box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 12px;
     font-size: 0.9rem;
