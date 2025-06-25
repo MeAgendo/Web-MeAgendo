@@ -1,0 +1,114 @@
+/* Reset general */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #222;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container.nuevo-evento-page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Encabezado */
+.ne-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.ne-title {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 28px;
+    margin: 0;
+}
+
+.ne-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Formulario */
+.ne-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ne-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.ne-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ddd;
+}
+
+/* Inputs, selects y textarea */
+.ne-input,
+.ne-textarea,
+.ne-select {
+    background-color: #2f2f2f;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    font-size: 15px;
+}
+
+.ne-input::placeholder,
+.ne-textarea::placeholder {
+    color: #aaa;
+}
+
+/* Textarea */
+.ne-textarea {
+    resize: none;
+    min-height: 80px;
+}
+
+/* Plazo de tiempo */
+.ne-time-range .ne-time-fields {
+    display: flex;
+    gap: 12px;
+}
+
+.ne-time-field {
+    flex: 1;
+}
+
+.ne-time-label {
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Botón Crear */
+.ne-btn-crear {
+    background-color: #fff;
+    color: #222;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ne-btn-crear:hover {
+    background-color: #f0f0f0;
+}
