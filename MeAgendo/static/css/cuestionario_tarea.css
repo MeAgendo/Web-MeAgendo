@@ -1,0 +1,118 @@
+/* Reset general */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #222;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container.nueva-tarea-page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Encabezado */
+.nt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.nt-title {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 28px;
+    margin: 0;
+}
+
+.nt-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Formulario */
+.nt-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.nt-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.nt-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ddd;
+}
+
+/* Inputs y selects */
+.nt-input,
+.nt-textarea,
+.nt-select {
+    background-color: #2f2f2f;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    font-size: 15px;
+}
+
+.nt-input::placeholder,
+.nt-textarea::placeholder {
+    color: #aaa;
+}
+
+/* Textarea específico */
+.nt-textarea {
+    resize: none;
+    min-height: 80px;
+}
+
+/* Grupo de prioridad */
+.nt-prioridad-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.nt-prioridad-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.nt-prioridad-label input[type="radio"] {
+    accent-color: #fff;
+    transform: scale(1.1);
+}
+
+/* Botón crear */
+.nt-btn-crear {
+    background-color: #fff;
+    color: #222;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.nt-btn-crear:hover {
+    background-color: #f0f0f0;
+}
