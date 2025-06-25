@@ -4,12 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
     ];
 
-    // Fecha central para el calendario grande
+    // Fecha central para el calendario
     let fechaCentral = new Date();
     // Fecha independiente para el mini calendario
     let miniFecha = new Date();
 
-    // Calendario grande
+    // Calendario
     function renderizarGrande() {
         const anio = fechaCentral.getFullYear();
         const mes = fechaCentral.getMonth();
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Mini calendario (usa fecha independiente)
+    // Mini calendario
     function renderizarMini() {
         const anio = miniFecha.getFullYear();
         const mes = miniFecha.getMonth();
@@ -97,6 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.getElementById("mini-next").addEventListener("click", () => {
         irMiniMes(1);
+    });
+    // cierra cualquier <details> abierto si clicas fuera de él
+    document.addEventListener("click", e => {
+        document.querySelectorAll("details[open]").forEach(detail => {
+            if (!detail.contains(e.target)) {
+                detail.open = false;
+            }
+        });
     });
 
     // Render inicial

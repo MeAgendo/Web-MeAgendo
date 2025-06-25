@@ -14,6 +14,8 @@
     <script src="../static/js/"></script>
     <link rel="stylesheet" href="../static/css/calendario.css">
     <script src="../static/js/calendario-sync.js"></script>
+    <script src="../static/js/formulario_dinamico.js"></script>
+
     <title>MeAgendo</title>
 </head>
 <body>
@@ -35,12 +37,16 @@
                 <details>
                     <summary><i class="fas fa-plus"></i></summary>
                     <ul>
-                        <li><a href="#">Tarea <i class="fa-solid fa-check"></i></a></li>
-                        <li><a href="#">Evento <i class="fa-regular fa-calendar"></i></a></li>
+                        <li><a href="#" id="btn-tarea">Tarea <i class="fa-solid fa-check"></i></a></li>
+                        <li><a href="#" id="btn-evento">Evento <i class="fa-regular fa-calendar"></i></a></li>
                     </ul>
                 </details>
             </header>
-            <div id="formulario-popup" class="modal oculto"></div>
+
+            <div id="formulario-dinamico" class="oculto">
+                <iframe id="formulario-iframe" frameborder="0"></iframe>
+            </div>
+
             <div class="calendar-container">
                 <nav class="calendar-header">
                     <div class="header-left">
@@ -64,45 +70,7 @@
                         <ul>
                             <li class="prevMonth-day" data-day="31">31</li>
                             <li class="day" data-day="1">1</li>
-                            <li class="day" data-day="2">2</li>
-                            <li class="day" data-day="3">3</li>
-                            <li class="day" data-day="4">4</li>
-                            <li class="day" data-day="5">5</li>
-                            <li class="day" data-day="6">6</li>
-                            <li class="day" data-day="7">7</li>
-                            <li class="day" data-day="8">8</li>
-                            <li class="day" data-day="9">9</li>
-                            <li class="day" data-day="10">10</li>
-                            <li class="day" data-day="11">11</li>
-                            <li class="day" data-day="12">12</li>
-                            <li class="day" data-day="13">13</li>
-                            <li class="day" data-day="14">14</li>
-                            <li class="day" data-day="15">15</li>
-                            <li class="day" data-day="16">16</li>
                             <li class="actual-day" data-day="17">17</li>
-                            <li class="day" data-day="18">18</li>
-                            <li class="day" data-day="19">19</li>
-                            <li class="day" data-day="20">20</li>
-                            <li class="day" data-day="21">21</li>
-                            <li class="day" data-day="22">22</li>
-                            <li class="day" data-day="23">23</li>
-                            <li class="day" data-day="24">24</li>
-                            <li class="day" data-day="25">25</li>
-                            <li class="day" data-day="26">26</li>
-                            <li class="day" data-day="27">27</li>
-                            <li class="day" data-day="28">28</li>
-                            <li class="day" data-day="29">29</li>
-                            <li class="day" data-day="30">30</li>
-                            <li class="nextMonth-day" data-day="1">1</li>
-                            <li class="nextMonth-day" data-day="2">2</li>
-                            <li class="nextMonth-day" data-day="3">3</li>
-                            <li class="nextMonth-day" data-day="4">4</li>
-                            <li class="nextMonth-day" data-day="5">5</li>
-                            <li class="nextMonth-day" data-day="6">6</li>
-                            <li class="nextMonth-day" data-day="7">7</li>
-                            <li class="nextMonth-day" data-day="8">8</li>
-                            <li class="nextMonth-day" data-day="9">9</li>
-                            <li class="nextMonth-day" data-day="10">10</li>
                             <li class="nextMonth-day" data-day="11">11</li>
                         </ul>
                     </div>
@@ -169,50 +137,7 @@
                         <ul>
                             <li class="prevMonth-day" data-day="31">31</li>
                             <li class="day" data-day="1">1</li>
-                            <li class="day" data-day="2">2</li>
-                            <li class="day" data-day="3">3</li>
-                            <li class="day" data-day="4">4</li>
-                            <li class="day" data-day="5">5</li>
-                            <li class="day" data-day="6">6</li>
-
-                            <li class="day" data-day="7">7</li>
-                            <li class="day" data-day="8">8</li>
-                            <li class="day" data-day="9">9</li>
-                            <li class="day" data-day="10">10</li>
-                            <li class="day" data-day="11">11</li>
-                            <li class="day" data-day="12">12</li>
-                            <li class="day" data-day="13">13</li>
-
-                            <li class="day" data-day="14">14</li>
-                            <li class="day" data-day="15">15</li>
-                            <li class="day" data-day="16">16</li>
                             <li class="actual-day" data-day="17">17</li>
-                            <li class="day" data-day="18">18</li>
-                            <li class="day" data-day="19">19</li>
-                            <li class="day" data-day="20">20</li>
-
-                            <li class="day" data-day="21">21</li>
-                            <li class="day" data-day="22">22</li>
-                            <li class="day" data-day="23">23</li>
-                            <li class="day" data-day="24">24</li>
-                            <li class="day" data-day="25">25</li>
-                            <li class="day" data-day="26">26</li>
-                            <li class="day" data-day="27">27</li>
-
-                            <li class="day" data-day="28">28</li>
-                            <li class="day" data-day="29">29</li>
-                            <li class="day" data-day="30">30</li>
-                            <li class="nextMonth-day" data-day="1">1</li>
-                            <li class="nextMonth-day" data-day="2">2</li>
-                            <li class="nextMonth-day" data-day="3">3</li>
-                            <li class="nextMonth-day" data-day="4">4</li>
-
-                            <li class="nextMonth-day" data-day="5">5</li>
-                            <li class="nextMonth-day" data-day="6">6</li>
-                            <li class="nextMonth-day" data-day="7">7</li>
-                            <li class="nextMonth-day" data-day="8">8</li>
-                            <li class="nextMonth-day" data-day="9">9</li>
-                            <li class="nextMonth-day" data-day="10">10</li>
                             <li class="nextMonth-day" data-day="11">11</li>
                         </ul>
                     </div>
