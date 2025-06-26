@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../static/css/calendario.css">
     <script src="../static/js/calendario-sync.js"></script>
     <script src="../static/js/formulario_dinamico.js"></script>
-
+    <script src="../static/js/interactions.js"></script>
     <title>MeAgendo</title>
 </head>
 <body>
@@ -54,7 +54,7 @@
                         <button id="nextMonth"><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                     <div class="header-center">
-                        <h2 id="currentMonth">Junio 2025</h2>
+                        <h2 id="currentLabel">Junio 2025</h2>
                     </div>
                     <div class="header-right">
                         <button id="viewMonth">Mes</button>
@@ -67,7 +67,7 @@
                         <li>Dom</li> <li>Lun</li> <li>Mar</li> <li>Mié</li> <li>Jue</li> <li>Vie</li> <li>Sáb</li>
                     </ul>
                     <div class="calendar-days">
-                        <ul>
+                        <ul id="daysList">
                             <li class="prevMonth-day" data-day="31">31</li>
                             <li class="day" data-day="1">1</li>
                             <li class="actual-day" data-day="17">17</li>
@@ -106,7 +106,7 @@
             </header>
 
             <div class="info-section">
-                <div class="progress-bar">
+                <div class="progress-bar oculto">
                     <div class="progress" style="width: 50%;"></div>
                 </div>
                 <h3 id="info-title">Título de la tarea/evento</h3>

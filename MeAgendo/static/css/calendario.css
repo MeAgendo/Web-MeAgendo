@@ -5,6 +5,9 @@
 }
 /* 1) Oculto por defecto */
 /* static/css/styles.css */
+.oculto {
+    display: none;
+}
 #formulario-dinamico.oculto {
     display: none;
 }
@@ -326,18 +329,35 @@ main header ul li:hover {
     padding: 4px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    cursor: pointer;
+}
+/* Ocultar la fila de cabecera (Dom–Sáb) en modo día */
+.calendar-content.day-view .row-days {
+    display: none;
+}
+
+/* Forzar que el UL sea 1 columna en modo día */
+.calendar-content.day-view .calendar-days ul {
+    grid-template-columns: 1fr !important;
+}
+
+
+
+.calendar-days ul li.actual-day {
+    display: flex;
+    flex: content;
+    height: auto;
+    width: auto;
+    background: #4a90e2;
+    color: #fff;
+    font-weight: bold;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 .calendar-days ul li.prevMonth-day,
 .calendar-days ul li.nextMonth-day {
     color: #ccc;
 }
-
-.calendar-days ul li.actual-day {
-    background: #4a90e2;
-    color: #fff;
-    font-weight: bold;
-}
-
 /* PANEL DERECHO */
 .right-panel {
     display: flex;
@@ -354,7 +374,7 @@ main header ul li:hover {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     gap: 0.5rem;
 }
 
@@ -440,8 +460,8 @@ main header ul li:hover {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1rem;
-    margin: 0.75rem 1rem;
+    padding: 0.5rem;
+    margin: 0.75rem 0.5rem; 
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -480,11 +500,10 @@ main header ul li:hover {
     flex-direction: column;
     align-items: center;
     padding: 0.5rem;
-    margin: 0.75rem 1rem;               /* mismos márgenes que .info-section */
+    margin: 0.75rem 0.5rem;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 2rem);           /* ancho completo menos márgenes */
     flex: 0 0 auto;                     /* no estira, respeta su contenido */
     box-sizing: border-box;
 }
@@ -553,6 +572,7 @@ main header ul li:hover {
     height: 20px;
     font-size: 0.75rem;
     border-radius: 4px;
+    cursor: pointer
 }
 
 .mini-calendar .calendar-days ul li.prevMonth-day,
