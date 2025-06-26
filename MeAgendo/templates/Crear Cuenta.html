@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
         <!--Live server-->
         <link rel="stylesheet" href="../static/css/crear_cuenta.css">
+        <script src="../static/js/signup.js"></script>
 </head>
 <body>
     <div class="container">
@@ -22,17 +23,52 @@
         </div>
         <div class="right_panel">
             <h2>Crear Cuenta</h2>
-            <div class="form-group">
-                <input type="text" placeholder="Nombre de usuario" class="input-field">
-                <input type="password" placeholder="Contraseña" class="input-field">
-                <input type="password" placeholder="Confirmar contraseña" class="input-field">
-            </div>
-            <button class="btn-signup">
-                <i class="fas fa-sign-in-alt"></i> CREAR CUENTA
-            </button>
+            <form method="post" action="/signup/">
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Nombre de usuario" class="input-field" required>
+                    <input type="email" name="email" placeholder="Correo electrónico" class="input-field" required>
+                    <!-- Wrapper para la 1ª contraseña -->
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            name="password1"
+                            id="password1"
+                            placeholder="Contraseña"
+                            class="input-field"
+                            required
+                        >
+                        <i
+                            class="fas fa-eye toggle-password"
+                            data-toggle="password1"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+
+                    <!-- Wrapper para la confirmación -->
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            name="password2"
+                            id="password2"
+                            placeholder="Confirmar contraseña"
+                            class="input-field"
+                            required
+                        >
+                        <i
+                            class="fas fa-eye toggle-password"
+                            data-toggle="password2"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+                </div>
 
 
+                <button type="submit" class="btn-signup">
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i> CREAR CUENTA
+                </button>
+            </form>
         </div>
+
     </div>
 </body>
 </html>
