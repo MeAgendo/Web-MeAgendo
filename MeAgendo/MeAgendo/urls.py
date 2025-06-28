@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from comments.views import test_template_view
+from django.http import HttpResponse
+
+# Vista temporal para evitar errores de importación
+def test_template_view(request):
+    return HttpResponse("<h1>Página en construcción</h1>")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test/', test_template_view, name='test-template'),

@@ -1,10 +1,18 @@
 // static/js/login.js
 document.addEventListener('DOMContentLoaded', () => {
-    const form     = document.querySelector('form');
-    const username = form.querySelector('input[name="username"]');
-    const password = form.querySelector('input[name="password"]');
-    const userErr  = username.parentNode.querySelector('.error-tooltip');
-    const passErr  = password.parentNode.querySelector('.error-tooltip');
+    const form              = document.querySelector('form');
+    const username          = form.querySelector('input[name="username"]');
+    const password          = form.querySelector('input[name="password"]');
+    const rememberCheckbox  = form.querySelector('input[name="recordar"]');
+    const userErr           = username.parentNode.querySelector('.error-tooltip');
+    const passErr           = password.parentNode.querySelector('.error-tooltip');
+
+    // 0) Prefill si había elegido “recordarme”
+    const savedUser = localStorage.getItem('rememberedUser');
+    if (savedUser) {
+        username.value           = savedUser;
+        rememberCheckbox.checked = true;
+    }
 
     // 1) Toggle del ojo
     form.querySelectorAll('.toggle-password').forEach(icon => {
@@ -12,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const inp = document.getElementById(icon.dataset.toggle);
             if (inp.type === 'password') {
                 inp.type = 'text';
-                icon.classList.replace('fa-eye','fa-eye-slash');
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
                 inp.type = 'password';
-                icon.classList.replace('fa-eye-slash','fa-eye');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         });
     });
@@ -37,6 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
             valid = false;
         }
         if (!valid) return;
+
+        // 2.1) Guardar o limpiar “recordarme”
+        if (rememberCheckbox.checked) {
+            localStorage.setItem('rememberedUser', username.value.trim());
+        } else {
+            localStorage.removeItem('rememberedUser');
+        }
 
         try {
             const resp = await fetch(form.action, {

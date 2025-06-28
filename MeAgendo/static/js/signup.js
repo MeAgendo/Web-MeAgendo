@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pass2    = form.querySelector('input[name="password2"]');
 
     // Toggle de visibilidad de contraseña
-    const toggles = form.querySelectorAll('.toggle-password');
-    toggles.forEach(btn => {
+    form.querySelectorAll('.toggle-password').forEach(btn => {
         btn.addEventListener('click', () => {
             const input = form.querySelector(`#${btn.dataset.toggle}`);
             if (input.type === 'password') {
@@ -27,22 +26,32 @@ document.addEventListener('DOMContentLoaded', function() {
         return err;
     }
 
-    // Sólo necesitamos tooltips en pass1 y pass2
+    // Tooltips para email, pass1 y pass2
+    const emailErr = createErrorElem();
+    email.parentNode.appendChild(emailErr);
     const p1Err = createErrorElem();
     pass1.parentNode.appendChild(p1Err);
     const p2Err = createErrorElem();
     pass2.parentNode.appendChild(p2Err);
 
-    function validateUsername() {
-        if (username.value.trim().length < 3) {
-            userErr.textContent = 'El usuario debe tener al menos 3 caracteres';
-            return false;
-        }
-        userErr.textContent = '';
-        return true;
+    // Mensaje general
+    const infoMsg = document.createElement('p');
+    infoMsg.classList.add('info-msg');
+    form.appendChild(infoMsg);
+
+    // Validaciones
+    function isStrongPassword(pwd) {
+        // mínimo 8 caracteres, mayúscula, minúscula, número y especial
+        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+        return strongRegex.test(pwd);
     }
 
     function validateEmail() {
+        const val = email.value.trim();
+        if (!val) {
+            emailErr.textContent = 'El correo es obligatorio';
+            return false;
+        }
         if (!email.checkValidity()) {
             emailErr.textContent = 'Debes ingresar un email válido';
             return false;
@@ -51,45 +60,58 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
-    function isStrongPassword(pwd) {
-        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
-        return strongRegex.test(pwd);
-    }
-
     function validatePasswords() {
         let ok = true;
+        p1Err.textContent = '';
+        p2Err.textContent = '';
 
         if (!isStrongPassword(pass1.value)) {
             p1Err.textContent =
-                'Debe tener 12+ caracteres, ' +
-                'minúscula, mayúscula, número y especial';
+                'Debe tener al menos 8 caracteres, mayúscula, minúscula, número y especial';
             ok = false;
-        } else {
-            p1Err.textContent = '';
         }
-
         if (pass1.value !== pass2.value) {
             p2Err.textContent = 'Las contraseñas no coinciden';
             ok = false;
-        } else {
-            p2Err.textContent = '';
         }
-
         return ok;
     }
 
+    // Validaciones en tiempo real
     form.addEventListener('input', function(e) {
-        if (e.target === username) {
-            validateUsername();
-        } else if (e.target === email) {
+        if (e.target === email) {
             validateEmail();
         } else if (e.target === pass1 || e.target === pass2) {
             validatePasswords();
         }
     });
 
-    form.addEventListener('submit', function(e) {
-        const ok3 = validatePasswords();
-        if (!ok3) e.preventDefault();
+    // Envío con AJAX y captura de errores
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        infoMsg.textContent = '';
+
+        const validEmail = validateEmail();
+        const validPass  = validatePasswords();
+        if (!validEmail || !validPass) return;
+
+        try {
+            const resp = await fetch(form.action, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new URLSearchParams(new FormData(form)),
+                credentials: 'include'
+            });
+            const result = await resp.json();
+
+            if (resp.ok && result.success) {
+                window.location.href = result.redirect || 'iniciar_sesion.html';
+            } else {
+                infoMsg.textContent = result.error || 'Error al registrarse';
+            }
+        } catch (err) {
+            infoMsg.textContent = 'Error de conexión. Intenta más tarde.';
+            console.error(err);
+        }
     });
 });
