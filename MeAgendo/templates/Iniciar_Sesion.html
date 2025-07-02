@@ -1,73 +1,72 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Iniciar Sesion</title>
-        <!--Google fonts-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap" rel="stylesheet">
-        <!--cdn fast awesome-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <!--Live server-->
-        <link rel="stylesheet" href="../static/css/iniciar_sesion.css">
-        <script src="../static/js/login.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar Sesión</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <!-- CSS propio -->
+  <link rel="stylesheet" href="{% static 'css/iniciar_sesion.css' %}">
+  <!-- JS propio (opcional si tienes validaciones de lado cliente) -->
+  <script src="{% static 'js/login.js' %}" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div class="left_panel">
-            <h2 class="slogan">Haz que suceda, una tarea a la vez.</h2>
-            <hr>
-            <h1>MeAgendo</h1>
-        </div>
-        <div class="right_panel">
-            <h2>Iniciar Sesión</h2>
-            <form method="post" action="/login/">
-                <div class="form-group">
-                    <!-- Usuario -->
-                    <div class="input-wrapper">
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Nombre de usuario"
-                            class="input-field"
-                            required
-                        >
-                        <small class="error-tooltip"></small>
-                    </div>
-
-                    <!-- Contraseña con ojo -->
-                    <div class="input-wrapper password-wrapper">
-                        <input
-                            type="password"
-                            id="login-password"
-                            name="password"
-                            placeholder="Contraseña"
-                            class="input-field"
-                            required
-                        >
-                        <i
-                            class="fas fa-eye toggle-password"
-                            data-toggle="login-password"
-                            aria-hidden="true"
-                        ></i>
-                        <small class="error-tooltip"></small>
-                    </div>
-                </div>
-
-                <div class="opciones-usuario">
-                    <label class="recordar">
-                        <input type="checkbox" name="recordar"> Recuerdame
-                    </label>
-                    <a href="forgot_password.html" class="olvide">¿Olvidaste tu contraseña?</a>
-                </div>
-
-                <button type="submit" class="btn-signup">
-                    <i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN
-                </button>
-            </form>
-        </div>
+  <div class="container">
+    <div class="left_panel">
+      <h2 class="slogan">Haz que suceda, una tarea a la vez.</h2>
+      <hr>
+      <h1>MeAgendo</h1>
     </div>
+    <div class="right_panel">
+      <h2>Iniciar Sesión</h2>
+      <form action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <div class="input-wrapper">
+          <input
+            type="text"
+            name="username"
+            placeholder="Nombre de usuario"
+            class="input-field"
+            required
+          >
+          <small class="error-tooltip"></small>
+        </div>
+
+        <div class="input-wrapper password-wrapper">
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            placeholder="Contraseña"
+            class="input-field"
+            required
+          >
+          <i
+            class="fas fa-eye toggle-password"
+            data-toggle="login-password"
+            aria-hidden="true"
+          ></i>
+          <small class="error-tooltip"></small>
+        </div>
+
+        <div class="opciones-usuario">
+          <a href="{% url 'password_reset:forgot' %}" class="olvide">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <button type="submit" class="btn-signup">
+          <i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN
+        </button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

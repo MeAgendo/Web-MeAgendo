@@ -27,6 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # aquí luego agregarás: 'accounts', 'password_reset', etc.
     'core',
+    'accounts',
+    'password_reset',
+    #'dashboard',
 
 ]
 
@@ -71,7 +74,7 @@ DATABASE_URL = os.getenv(
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 }
-print("»» DATABASE_URL =", os.getenv("DATABASE_URL"))
+
 
 
 # Password validation
@@ -95,3 +98,5 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'MeAgendo <no-reply@meagendo.local>'
