@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSignup = document.querySelector('.btn-signup');
 
     btnLogin.addEventListener('click', () => {
-        window.location.href = 'Iniciar_Sesion.html';
+        window.location.href = '/accounts/login/';
     });
 
     btnSignup.addEventListener('click', () => {
-        window.location.href = 'Crear_Cuenta.html';
-    });
+        window.location.href = '/accounts/signup/';
+    }); 
 });
+

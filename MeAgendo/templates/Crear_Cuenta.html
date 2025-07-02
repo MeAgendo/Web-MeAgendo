@@ -1,74 +1,94 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Crear Cuenta</title>
-        <!--Google fonts-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap" rel="stylesheet">
-        <!--cdn fast awesome-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <!--Live server-->
-        <link rel="stylesheet" href="../static/css/crear_cuenta.css">
-        <script src="../static/js/signup.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Cuenta</title>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- CSS propio -->
+  <link rel="stylesheet" href="{% static 'css/crear_cuenta.css' %}">
+
+  <!-- JS propio -->
+  <script src="{% static 'js/signup.js' %}" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div class="left_panel">
-            <h2 class="slogan">Haz que suceda, una tarea a la vez.</h2>
-            <hr>
-            <h1>MeAgendo</h1>
-        </div>
-        <div class="right_panel">
-            <h2>Crear Cuenta</h2>
-            <form method="post" action="/signup/">
-                <div class="form-group">
-                    <input type="text" name="username" placeholder="Nombre de usuario" class="input-field" required>
-                    <input type="email" name="email" placeholder="Correo electrónico" class="input-field" required>
-                    <!-- Wrapper para la 1ª contraseña -->
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            name="password1"
-                            id="password1"
-                            placeholder="Contraseña"
-                            class="input-field"
-                            required
-                        >
-                        <i
-                            class="fas fa-eye toggle-password"
-                            data-toggle="password1"
-                            aria-hidden="true"
-                        ></i>
-                    </div>
-
-                    <!-- Wrapper para la confirmación -->
-                    <div class="password-wrapper">
-                        <input
-                            type="password"
-                            name="password2"
-                            id="password2"
-                            placeholder="Confirmar contraseña"
-                            class="input-field"
-                            required
-                        >
-                        <i
-                            class="fas fa-eye toggle-password"
-                            data-toggle="password2"
-                            aria-hidden="true"
-                        ></i>
-                    </div>
-                </div>
-
-
-                <button type="submit" class="btn-signup">
-                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i> CREAR CUENTA
-                </button>
-            </form>
-        </div>
-
+  <div class="container">
+    <div class="left_panel">
+      <h2 class="slogan">Haz que suceda, una tarea a la vez.</h2>
+      <hr>
+      <h1>MeAgendo</h1>
     </div>
+    <div class="right_panel">
+      <h2>Crear Cuenta</h2>
+      <form id="signup-form"
+            action="{% url 'accounts:signup' %}"
+            method="post">
+        {% csrf_token %}
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <div class="form-group">
+          <input
+            type="text"
+            name="username"
+            placeholder="Nombre de usuario"
+            class="input-field"
+            required
+          >
+          <input
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            class="input-field"
+            required
+          >
+          
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="password1"
+              id="password1"
+              placeholder="Contraseña"
+              class="input-field"
+              required
+            >
+            <i
+              class="fas fa-eye toggle-password"
+              data-toggle="password1"
+            ></i>
+          </div>
+
+          <div class="password-wrapper">
+            <input
+              type="password"
+              name="password2"
+              id="password2"
+              placeholder="Confirmar contraseña"
+              class="input-field"
+              required
+            >
+            <i
+              class="fas fa-eye toggle-password"
+              data-toggle="password2"
+            ></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-signup">
+          <i class="fas fa-user-plus"></i> CREAR CUENTA
+        </button>
+
+        <!-- Mensaje de estado inyectado por signup.js -->
+        <p class="info-msg"></p>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
