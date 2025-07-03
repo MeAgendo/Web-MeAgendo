@@ -112,3 +112,8 @@ body {
 .ne-btn-crear:hover {
     background-color: #f0f0f0;
 }
+.ne-error-message {
+  color: #c00;
+  margin-top: 0.5em;
+  font-size: 0.9em;
+}

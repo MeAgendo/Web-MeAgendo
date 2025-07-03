@@ -111,25 +111,17 @@
         <div class="ne-time-fields">
           <div class="ne-time-field">
             <span class="ne-time-label">Desde</span>
-            <input
-              type="time"
-              id="hora-desde"
-              name="hora-desde"
-              class="ne-input"
-            />
+            <input type="time" id="hora-desde" name="hora-desde" class="ne-input" required />
           </div>
           <div class="ne-time-field">
             <span class="ne-time-label">Hasta</span>
-            <input
-              type="time"
-              id="hora-hasta"
-              name="hora-hasta"
-              class="ne-input"
-            />
+            <input type="time" id="hora-hasta" name="hora-hasta" class="ne-input" required />
           </div>
         </div>
       </div>
-
+      </div>
+      <!-- error aquí -->
+      <div id="time-error" class="ne-error-message"></div>
       <!-- Botón Crear -->
       <div class="ne-form-group ne-submit-group">
         <button type="submit" class="ne-btn-crear">CREAR</button>
