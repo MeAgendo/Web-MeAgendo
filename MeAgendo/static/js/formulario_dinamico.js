@@ -6,35 +6,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnT    = document.getElementById("btn-tarea");
   const btnE    = document.getElementById("btn-evento");
 
+  function cerrar() {
+    overlay.classList.add("oculto");
+    iframe.src = "";
+
+    if (window.CalendarAPI) {
+      CalendarAPI.refreshEvents()
+        .then(() => {
+          if (window.switchView && window.currentView) {
+            switchView(window.currentView);
+          }
+        })
+        .catch(err => console.error("Error al refrescar tras cerrar modal:", err));
+    }
+  }
+
   function abrir(url) {
     if (!url) {
       console.error("URL de formulario no definida");
       return;
     }
 
-    // 1) forma la URL completa con el mismo esquema://host:puerto
     const fullUrl = url.startsWith("http")
       ? url
       : window.location.origin + url;
 
     console.log("→ Abriendo en iframe:", fullUrl);
     iframe.src = fullUrl;
-
-    // 2) muestra el overlay
     overlay.classList.remove("oculto");
 
-    // 3) engancha el close-btn tras cargar
     iframe.onload = () => {
       try {
         const doc      = iframe.contentDocument || iframe.contentWindow.document;
         const closeBtn = doc.querySelector(".nt-close-btn, .ne-close-btn");
-        if (closeBtn) {
-          closeBtn.addEventListener("click", () => {
-            overlay.classList.add("oculto");
-            iframe.src = "";
-            if (window.refreshEvents) window.refreshEvents();
-          });
-        }
+        if (closeBtn) closeBtn.addEventListener("click", cerrar);
       } catch (err) {
         console.warn("No se pudo enganchar el close-btn:", err);
       }
@@ -51,12 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     abrir(window.urlNewEvent);
   });
 
-  // Cerrar overlay haciendo click en la zona semitransparente
   overlay.addEventListener("click", e => {
-    if (e.target === overlay) {
-      overlay.classList.add("oculto");
-      iframe.src = "";
-      if (window.refreshEvents) window.refreshEvents();
-    }
+    if (e.target === overlay) cerrar();
   });
 });
