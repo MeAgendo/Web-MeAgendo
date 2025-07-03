@@ -1,13 +1,14 @@
-// calendar.js
+// static/js/calendar-sync.js
+
 document.addEventListener("DOMContentLoaded", function() {
   // 1) DATOS GLOBALES
-  window.mesTexto      = [
+  window.mesTexto     = [
     "Enero","Febrero","Marzo","Abril","Mayo","Junio",
     "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
   ];
-  window.fechaCentral  = new Date();
-  window.miniFecha      = new Date();
-  window.currentView    = "month";
+  window.fechaCentral = new Date();
+  window.miniFecha    = new Date();
+  window.currentView  = "month";
 
   // 2) REFERENCIAS AL DOM
   const prevBtn        = document.getElementById("prevMonth");
@@ -18,12 +19,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const daysList       = document.getElementById("daysList");
   const currentLabelEl = document.getElementById("currentLabel");
 
-  // mini-calendario: le asignamos un ID para el interactions.js
-  const miniUl = document.querySelector(".calendar-content.mini .calendar-days ul");
-  miniUl.id = "miniDaysList";
-
-  const miniPrevBtn     = document.getElementById("mini-prev");
-  const miniNextBtn     = document.getElementById("mini-next");
+  // mini-calendario: le asignamos un ID para interactions.js
+  const miniUl         = document.querySelector(".calendar-content.mini .calendar-days ul");
+  miniUl.id            = "miniDaysList";
+  const miniPrevBtn    = document.getElementById("mini-prev");
+  const miniNextBtn    = document.getElementById("mini-next");
 
   // 3) FORMAT DMY
   function formatDMY(d) {
@@ -142,15 +142,20 @@ document.addEventListener("DOMContentLoaded", function() {
     miniFecha.setMonth(miniFecha.getMonth() + offset);
     renderMini();
   }
+
   function switchView(view) {
     currentView = view;
     updateHeader();
     const container = document.querySelector(".calendar-content:not(.mini)");
     container.classList.remove("month-view","week-view","day-view");
     container.classList.add(view + "-view");
+
     if (view === "month") renderMonth();
     if (view === "week")  renderWeek();
     if (view === "day")   renderDay();
+
+    // tras redibujar, pinta dots de eventos
+    if (window.pintarEventos) window.pintarEventos();
   }
   window.switchView = switchView;
 
@@ -186,4 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // 8) RENDER INICIAL
   switchView("month");
   renderMini();
+
+  // al arrancar, pinta dots de eventos en el mes actual
+  if (window.pintarEventos) window.pintarEventos();
 });

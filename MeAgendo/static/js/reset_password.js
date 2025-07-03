@@ -1,4 +1,5 @@
 // static/js/reset_password.js
+
 document.addEventListener('DOMContentLoaded', () => {
   const form      = document.getElementById('reset-form');
   const codeInput = form.querySelector('input[name="code"]');
@@ -9,23 +10,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const p2Err     = pass2.parentNode.querySelector('.error-tooltip');
   const infoMsg   = form.querySelector('.info-msg');
 
-  // Toggle de visibilidad (ojo)
-  form.querySelectorAll('.toggle-password').forEach(icon =>
+  // 0) Toggle de visibilidad (ojo) para cada input password
+  form.querySelectorAll('.toggle-password').forEach(icon => {
     icon.addEventListener('click', () => {
-      const inp = document.getElementById(icon.dataset.toggle);
-      inp.type = inp.type === 'password' ? 'text' : 'password';
-      icon.classList.toggle('fa-eye-slash');
-    })
-  );
+      const targetId = icon.dataset.toggle;
+      const inputEl  = document.getElementById(targetId);
+      if (!inputEl) return;
 
-  // Validación de fuerza
+      // Cambia tipo y clase de icono
+      if (inputEl.type === 'password') {
+        inputEl.type = 'text';
+        icon.classList.add('fa-eye-slash');
+      } else {
+        inputEl.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+      }
+    });
+  });
+
+  // 1) Comprueba fuerza de contraseña
   function isStrongPassword(pwd) {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return re.test(pwd);
   }
 
+  // 2) Envío del form con fetch + validaciones
   form.addEventListener('submit', async e => {
     e.preventDefault();
+
+    // limpia mensajes
     codeErr.textContent = '';
     p1Err.textContent   = '';
     p2Err.textContent   = '';
@@ -37,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
       valid = false;
     }
     if (!isStrongPassword(pass1.value)) {
-      p1Err.textContent = 'Mínimo 8 car., mayúscula, minúscula, número y especial';
+      p1Err.textContent = 'Mínimo 8 car., mayúsculas, minúsculas, número y especial';
       valid = false;
     }
     if (pass1.value !== pass2.value) {
@@ -46,29 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!valid) return;
 
-    // Obtener CSRF token
+    // prepara datos y CSRF
     const csrfToken = form.querySelector('[name="csrfmiddlewaretoken"]').value;
+    const payload   = new URLSearchParams(new FormData(form));
 
     try {
       const resp = await fetch(form.action, {
-        method: 'POST',
+        method:      'POST',
         credentials: 'include',
         headers: {
-          'Accept':      'application/json',
-          'X-CSRFToken': csrfToken
+          'X-CSRFToken': csrfToken,
+          'Accept':      'application/json'
         },
-        body: new URLSearchParams(new FormData(form))
+        body: payload
       });
       const data = await resp.json();
 
       if (resp.ok && data.success) {
         infoMsg.textContent = data.message;
-        // Tras 2 segundos retorna al login
-        setTimeout(() => {
-          window.location.href = '/accounts/login/';
-        }, 2000);
+        setTimeout(() => window.location.href = '/accounts/login/', 2000);
       } else {
-        // Muestra el mensaje de error devuelto
+        // error genérico o específico del código
         codeErr.textContent = data.message || 'Error al restablecer';
       }
     } catch (err) {
