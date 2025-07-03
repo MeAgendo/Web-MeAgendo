@@ -1,18 +1,11 @@
 // static/js/login.js
-document.addEventListener('DOMContentLoaded', () => {
-  const form              = document.querySelector('form');
-  const username          = form.querySelector('input[name="username"]');
-  const password          = form.querySelector('input[name="password"]');
-  const rememberCheckbox  = form.querySelector('input[name="recordar"]');
-  const userErr           = username.parentNode.querySelector('.error-tooltip');
-  const passErr           = password.parentNode.querySelector('.error-tooltip');
 
-  // 0) Prefill si había elegido “recordarme”
-  const savedUser = localStorage.getItem('rememberedUser');
-  if (savedUser) {
-    username.value           = savedUser;
-    rememberCheckbox.checked = true;
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  const form     = document.querySelector('form');
+  const username = form.querySelector('input[name="username"]');
+  const password = form.querySelector('input[name="password"]');
+  const userErr  = username.parentNode.querySelector('.error-tooltip');
+  const passErr  = password.parentNode.querySelector('.error-tooltip');
 
   // 1) Toggle del ojo
   form.querySelectorAll('.toggle-password').forEach(icon =>
@@ -39,22 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!valid) {
-      // Si falla validación, cancela envío
       e.preventDefault();
-      return;
     }
-
-    // Guardar o limpiar “recordarme”
-    if (rememberCheckbox.checked) {
-      localStorage.setItem('rememberedUser', username.value.trim());
-    } else {
-      localStorage.removeItem('rememberedUser');
-    }
-    // No cancelamos e=> el form se envía normalmente,  
-    // Django recibe el token CSRF del hidden y la cookie.
+    // Si todo es válido, el form se envía normalmente
   });
 
-  // 3) Limpia tooltips al clickar fuera
+  // 3) Limpia tooltips al clicar fuera
   document.addEventListener('click', e => {
     if (!e.target.closest('.input-wrapper')) {
       userErr.textContent = '';

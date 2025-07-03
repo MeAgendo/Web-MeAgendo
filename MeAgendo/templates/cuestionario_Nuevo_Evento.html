@@ -1,125 +1,141 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Nuevo Evento</title>
-        <!--Google fonts-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap" rel="stylesheet">
-        <!--cdn fast awesome-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <!--Live server-->
-        <link rel="stylesheet" href="../static/css/cuestionario_evento.css">
-    </head>
-    <body>
-        <div class="container nuevo-evento-page">
-            <!-- Header -->
-            <header class="ne-header">
-                <button type="button" class="ne-close-btn">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h1 class="ne-title">Nuevo Evento</h1>
-            </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuevo Evento</title>
 
-            <!-- Formulario Nuevo Evento -->
-            <form class="ne-form">
-                <!-- Fecha límite -->
-                <div class="ne-form-group">
-                    <label for="fecha-limite" class="ne-label">
-                        <i class="fas fa-calendar-alt ne-icon"></i>
-                        Fecha
-                    </label>
-                    <input
-                        type="date"
-                        id="fecha-limite"
-                        name="fecha-limite"
-                        class="ne-input"
-                        placeholder="dd/mm/aaaa"
-                    />
-                </div>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap"
+    rel="stylesheet"
+  >
 
-                <!-- Título -->
-                <div class="ne-form-group">
-                    <label for="titulo" class="ne-label">Agregar título</label>
-                    <input
-                        type="text"
-                        id="titulo"
-                        name="titulo"
-                        class="ne-input"
-                        placeholder="Escribe un título"
-                    />
-                </div>
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  >
 
-                <!-- Descripción -->
-                <div class="ne-form-group">
-                    <label for="descripcion" class="ne-label">
-                        <i class="fas fa-align-left ne-icon"></i>
-                        Agregar descripción (opcional)
-                    </label>
-                    <textarea
-                        id="descripcion"
-                        name="descripcion"
-                        class="ne-textarea"
-                        rows="3"
-                        placeholder="Escribe una descripción"
-                    ></textarea>
-                </div>
+  <!-- CSS propio -->
+  <link
+    rel="stylesheet"
+    href="{% static 'css/cuestionario_evento.css' %}"
+  >
+</head>
+<body>
+  <div class="container nuevo-evento-page">
 
-                <!-- Repetición -->
-                <div class="ne-form-group">
-                    <label for="repeticion" class="ne-label">
-                        <i class="fas fa-redo ne-icon"></i>
-                        Repetición
-                    </label>
-                    <select
-                        id="repeticion"
-                        name="repeticion"
-                        class="ne-select"
-                    >
-                        <option value="no">No recurrente</option>
-                        <option value="diario">Diario</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="mensual">Mensual</option>
-                    </select>
-                </div>
+    <!-- Header -->
+    <header class="ne-header">
+      <button type="button" class="ne-close-btn">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <h1 class="ne-title">Nuevo Evento</h1>
+    </header>
 
-                <!-- Plazo de tiempo -->
-                <div class="ne-form-group ne-time-range">
-                    <label class="ne-label">
-                        <i class="fas fa-clock ne-icon"></i>
-                        Plazo de tiempo
-                    </label>
-                    <div class="ne-time-fields">
-                        <div class="ne-time-field">
-                            <span class="ne-time-label">Desde</span>
-                            <input
-                                type="time"
-                                id="hora-desde"
-                                name="hora-desde"
-                                class="ne-input"
-                            />
-                        </div>
-                        <div class="ne-time-field">
-                            <span class="ne-time-label">Hasta</span>
-                            <input
-                                type="time"
-                                id="hora-hasta"
-                                name="hora-hasta"
-                                class="ne-input"
-                            />
-                        </div>
-                    </div>
-                </div>
+    <!-- Formulario Nuevo Evento -->
+    <form method="post" class="ne-form">
+      {% csrf_token %}
 
-                <!-- Botón Crear -->
-                <div class="ne-form-group ne-submit-group">
-                    <button type="submit" class="ne-btn-crear">
-                        CREAR
-                    </button>
-                </div>
-            </form>
+      <!-- Fecha límite -->
+      <div class="ne-form-group">
+        <label for="fecha-limite" class="ne-label">
+          <i class="fas fa-calendar-alt ne-icon"></i>
+          Fecha
+        </label>
+        <input
+          type="date"
+          id="fecha-limite"
+          name="fecha-limite"
+          class="ne-input"
+          required
+        />
+      </div>
+
+      <!-- Título -->
+      <div class="ne-form-group">
+        <label for="titulo" class="ne-label">Agregar título</label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          class="ne-input"
+          placeholder="Escribe un título"
+          required
+        />
+      </div>
+
+      <!-- Descripción -->
+      <div class="ne-form-group">
+        <label for="descripcion" class="ne-label">
+          <i class="fas fa-align-left ne-icon"></i>
+          Agregar descripción (opcional)
+        </label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          class="ne-textarea"
+          rows="3"
+          placeholder="Escribe una descripción"
+        ></textarea>
+      </div>
+
+      <!-- Repetición -->
+      <div class="ne-form-group">
+        <label for="repeticion" class="ne-label">
+          <i class="fas fa-redo ne-icon"></i>
+          Repetición
+        </label>
+        <select
+          id="repeticion"
+          name="repeticion"
+          class="ne-select"
+        >
+          <option value="no">No recurrente</option>
+          <option value="diario">Diario</option>
+          <option value="semanal">Semanal</option>
+          <option value="mensual">Mensual</option>
+        </select>
+      </div>
+
+      <!-- Plazo de tiempo -->
+      <div class="ne-form-group ne-time-range">
+        <label class="ne-label">
+          <i class="fas fa-clock ne-icon"></i>
+          Horario
+        </label>
+        <div class="ne-time-fields">
+          <div class="ne-time-field">
+            <span class="ne-time-label">Desde</span>
+            <input
+              type="time"
+              id="hora-desde"
+              name="hora-desde"
+              class="ne-input"
+            />
+          </div>
+          <div class="ne-time-field">
+            <span class="ne-time-label">Hasta</span>
+            <input
+              type="time"
+              id="hora-hasta"
+              name="hora-hasta"
+              class="ne-input"
+            />
+          </div>
         </div>
-    </body>
+      </div>
+
+      <!-- Botón Crear -->
+      <div class="ne-form-group ne-submit-group">
+        <button type="submit" class="ne-btn-crear">CREAR</button>
+      </div>
+    </form>
+
+  </div>
+</body>
 </html>
