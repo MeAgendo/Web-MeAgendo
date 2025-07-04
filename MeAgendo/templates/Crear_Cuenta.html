@@ -26,31 +26,55 @@
     </div>
     <div class="right_panel">
       <h2>Crear Cuenta</h2>
+
       <form id="signup-form"
             action="{% url 'accounts:signup' %}"
             method="post">
         {% csrf_token %}
-        {% if error %}
-          <p class="error">{{ error }}</p>
-        {% endif %}
+
+        {% comment %} Errores generales (non-field errors) {% endcomment %}
+        {% for err in form.non_field_errors %}
+          <small class="error-tooltip oculto">{{ err }}</small>
+        {% endfor %}
 
         <div class="form-group">
-          <input
-            type="text"
-            name="username"
-            placeholder="Nombre de usuario"
-            class="input-field"
-            required
-          >
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            class="input-field"
-            required
-          >
-          
-          <div class="password-wrapper">
+
+          {% comment %} Username {% endcomment %}
+          <div class="input-wrapper">
+            <input
+              type="text"
+              name="username"
+              placeholder="Nombre de usuario"
+              class="input-field"
+              value="{{ form.username.value|default_if_none:'' }}"
+              required
+            >
+            <small class="error-tooltip oculto">
+              {% if form.username.errors %}
+                {{ form.username.errors.0 }}
+              {% endif %}
+            </small>
+          </div>
+
+          {% comment %} Email {% endcomment %}
+          <div class="input-wrapper">
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo electrónico"
+              class="input-field"
+              value="{{ form.email.value|default_if_none:'' }}"
+              required
+            >
+            <small class="error-tooltip oculto">
+              {% if form.email.errors %}
+                {{ form.email.errors.0 }}
+              {% endif %}
+            </small>
+          </div>
+
+          {% comment %} Contraseña {% endcomment %}
+          <div class="password-wrapper input-wrapper">
             <input
               type="password"
               name="password1"
@@ -59,13 +83,16 @@
               class="input-field"
               required
             >
-            <i
-              class="fas fa-eye toggle-password"
-              data-toggle="password1"
-            ></i>
+            <i class="fas fa-eye toggle-password" data-toggle="password1"></i>
+            <small class="error-tooltip oculto">
+              {% if form.password1.errors %}
+                {{ form.password1.errors.0 }}
+              {% endif %}
+            </small>
           </div>
 
-          <div class="password-wrapper">
+          {% comment %} Confirmar contraseña {% endcomment %}
+          <div class="password-wrapper input-wrapper">
             <input
               type="password"
               name="password2"
@@ -74,18 +101,21 @@
               class="input-field"
               required
             >
-            <i
-              class="fas fa-eye toggle-password"
-              data-toggle="password2"
-            ></i>
+            <i class="fas fa-eye toggle-password" data-toggle="password2"></i>
+            <small class="error-tooltip oculto">
+              {% if form.password2.errors %}
+                {{ form.password2.errors.0 }}
+              {% endif %}
+            </small>
           </div>
+
         </div>
 
         <button type="submit" class="btn-signup">
           <i class="fas fa-user-plus"></i> CREAR CUENTA
         </button>
 
-        <!-- Mensaje de estado inyectado por signup.js -->
+        {% comment %} Mensaje de estado inyectado por signup.js {% endcomment %}
         <p class="info-msg"></p>
       </form>
     </div>

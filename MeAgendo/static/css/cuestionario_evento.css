@@ -48,6 +48,7 @@ body {
     flex-direction: column;
 }
 
+/* etiqueta y campos */
 .ne-label {
     font-size: 14px;
     margin-bottom: 8px;
@@ -57,7 +58,6 @@ body {
     color: #ddd;
 }
 
-/* Inputs, selects y textarea */
 .ne-input,
 .ne-textarea,
 .ne-select {
@@ -74,7 +74,6 @@ body {
     color: #aaa;
 }
 
-/* Textarea */
 .ne-textarea {
     resize: none;
     min-height: 80px;
@@ -96,6 +95,13 @@ body {
     display: block;
 }
 
+/* Grupo del botón Crear */
+.ne-submit-group {
+    display: flex;
+    justify-content: flex-start; /* asegura que no se estire */
+    margin-top: 8px;
+}
+
 /* Botón Crear */
 .ne-btn-crear {
     background-color: #fff;
@@ -112,8 +118,9 @@ body {
 .ne-btn-crear:hover {
     background-color: #f0f0f0;
 }
+
 .ne-error-message {
-  color: #c00;
-  margin-top: 0.5em;
-  font-size: 0.9em;
+    color: #c00;
+    margin-top: 0.5em;
+    font-size: 0.9em;
 }
