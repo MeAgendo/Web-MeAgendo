@@ -1,10 +1,27 @@
-// static/js/signup.js
 document.addEventListener('DOMContentLoaded', function() {
     const form     = document.querySelector('form');
     const username = form.querySelector('input[name="username"]');
     const email    = form.querySelector('input[name="email"]');
     const pass1    = form.querySelector('input[name="password1"]');
     const pass2    = form.querySelector('input[name="password2"]');
+
+    // localiza los <small> estáticos en el DOM
+    const userErr  = username.parentNode.querySelector('.error-tooltip');
+    const emailErr = email.parentNode.querySelector('.error-tooltip');
+    const p1Err    = pass1.parentNode.querySelector('.error-tooltip');
+    const p2Err    = pass2.parentNode.querySelector('.error-tooltip');
+
+    // Helper para mostrar/ocultar mensaje de error
+    function showErr(elem, msg) {
+        elem.textContent = msg;
+        if (msg) {
+            elem.classList.remove('oculto');
+        } else {
+            elem.classList.add('oculto');
+        }
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"]');
 
     // Toggle de visibilidad de contraseña
     form.querySelectorAll('.toggle-password').forEach(btn => {
@@ -20,80 +37,110 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    function createErrorElem() {
-        const err = document.createElement('small');
-        err.classList.add('error-tooltip');
-        return err;
-    }
-
-    // Tooltips para email, pass1 y pass2
-    const emailErr = createErrorElem();
-    email.parentNode.appendChild(emailErr);
-    const p1Err = createErrorElem();
-    pass1.parentNode.appendChild(p1Err);
-    const p2Err = createErrorElem();
-    pass2.parentNode.appendChild(p2Err);
-
-    // Mensaje general
-    const infoMsg = document.createElement('p');
-    infoMsg.classList.add('info-msg');
-    form.appendChild(infoMsg);
-
-    // Validaciones
+    // Validaciones básicas
     function isStrongPassword(pwd) {
-        // mínimo 8 caracteres, mayúscula, minúscula, número y especial
         const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
         return strongRegex.test(pwd);
     }
 
-    function validateEmail() {
-        const val = email.value.trim();
-        if (!val) {
-            emailErr.textContent = 'El correo es obligatorio';
-            return false;
-        }
-        if (!email.checkValidity()) {
-            emailErr.textContent = 'Debes ingresar un email válido';
-            return false;
-        }
-        emailErr.textContent = '';
-        return true;
-    }
-
     function validatePasswords() {
         let ok = true;
-        p1Err.textContent = '';
-        p2Err.textContent = '';
+        showErr(p1Err, '');
+        showErr(p2Err, '');
 
         if (!isStrongPassword(pass1.value)) {
-            p1Err.textContent =
-                'Debe tener al menos 8 caracteres, mayúscula, minúscula, número y especial';
+            showErr(p1Err,
+                'Debe tener al menos 8 caracteres, mayúscula, minúscula, número y especial'
+            );
             ok = false;
         }
         if (pass1.value !== pass2.value) {
-            p2Err.textContent = 'Las contraseñas no coinciden';
+            showErr(p2Err, 'Las contraseñas no coinciden');
             ok = false;
         }
         return ok;
     }
 
-    // Validaciones en tiempo real
-    form.addEventListener('input', function(e) {
-        if (e.target === email) {
-            validateEmail();
-        } else if (e.target === pass1 || e.target === pass2) {
-            validatePasswords();
-        }
-    });
+    // Validación de username en servidor
+    let userTimeout;
+    async function validateUsername() {
+        clearTimeout(userTimeout);
+        const val = username.value.trim();
 
-    // Envío con AJAX y captura de errores
+        if (!val) {
+            showErr(userErr, 'El nombre de usuario es obligatorio');
+            return false;
+        }
+        showErr(userErr, 'Comprobando…');
+
+        await new Promise(r => userTimeout = setTimeout(r, 300));
+        try {
+            const res = await fetch(
+                `/accounts/check-username/?username=${encodeURIComponent(val)}`
+            );
+            const { exists } = await res.json();
+            showErr(
+                userErr,
+                exists ? 'Este nombre de usuario ya está en uso' : ''
+            );
+            return !exists;
+        } catch {
+            showErr(userErr, 'Error al validar usuario');
+            return false;
+        }
+    }
+
+    // Validación de email en servidor
+    let emailTimeout;
+    async function validateEmail() {
+        const val = email.value.trim();
+
+        if (!val) {
+            showErr(emailErr, 'El correo es obligatorio');
+            return false;
+        }
+        if (!email.checkValidity()) {
+            showErr(emailErr, 'Debes ingresar un email válido');
+            return false;
+        }
+        showErr(emailErr, 'Comprobando…');
+
+        await new Promise(r => emailTimeout = setTimeout(r, 300));
+        try {
+            const res = await fetch(
+                `/accounts/check-email/?email=${encodeURIComponent(val)}`
+            );
+            const { exists } = await res.json();
+            showErr(
+                emailErr,
+                exists ? 'Este correo ya está registrado' : ''
+            );
+            return !exists;
+        } catch {
+            showErr(emailErr, 'Error al validar correo');
+            return false;
+        }
+    }
+
+    // Eventos de validación
+    username.addEventListener('blur', validateUsername);
+    email.addEventListener('blur', validateEmail);
+    pass1.addEventListener('input', validatePasswords);
+    pass2.addEventListener('input', validatePasswords);
+
+    // Envío con AJAX
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        infoMsg.textContent = '';
 
-        const validEmail = validateEmail();
-        const validPass  = validatePasswords();
-        if (!validEmail || !validPass) return;
+        showErr(userErr, '');
+        showErr(emailErr, '');
+        showErr(p1Err, '');
+        showErr(p2Err, '');
+
+        const vUser  = await validateUsername();
+        const vEmail = await validateEmail();
+        const vPass  = validatePasswords();
+        if (!vUser || !vEmail || !vPass) return;
 
         try {
             const resp = await fetch(form.action, {
@@ -105,11 +152,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await resp.json();
 
             if (resp.ok && result.success) {
-                window.location.href = result.redirect || 'iniciar_sesion.html';
+                window.location.href = result.redirect || '/accounts/login/';
+            } else if (result.errors) {
+                // Backend errors
+                if (result.errors.username) {
+                    showErr(userErr, result.errors.username[0]);
+                }
+                if (result.errors.email) {
+                    showErr(emailErr, result.errors.email[0]);
+                }
+                if (result.errors.password1) {
+                    showErr(p1Err, result.errors.password1[0]);
+                }
+                if (result.errors.password2) {
+                    showErr(p2Err, result.errors.password2[0]);
+                }
             } else {
+                // Otros errores generales
+                const infoMsg = form.querySelector('.info-msg');
                 infoMsg.textContent = result.error || 'Error al registrarse';
             }
         } catch (err) {
+            const infoMsg = form.querySelector('.info-msg');
             infoMsg.textContent = 'Error de conexión. Intenta más tarde.';
             console.error(err);
         }

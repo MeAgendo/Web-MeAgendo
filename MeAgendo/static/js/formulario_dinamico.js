@@ -37,9 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     iframe.onload = () => {
       try {
-        const doc      = iframe.contentDocument || iframe.contentWindow.document;
-        const closeBtn = doc.querySelector(".nt-close-btn, .ne-close-btn");
-        if (closeBtn) closeBtn.addEventListener("click", cerrar);
+        // selecciona tanto el botón de X como el botón OK
+        const closeBtns = iframe.contentDocument
+          .querySelectorAll(".nt-close-btn, .ne-close-btn, .btn-ok");
+        closeBtns.forEach(btn => btn.addEventListener("click", cerrar));
       } catch (err) {
         console.warn("No se pudo enganchar el close-btn:", err);
       }

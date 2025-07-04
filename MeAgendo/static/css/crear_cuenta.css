@@ -6,7 +6,8 @@
 
 body {
     height: 100vh;
-    background: url(../img/fondo\ inicio_waifu2x_art_noise3_scale_AI\ Extender.jpg) no-repeat center center/cover;
+    background: url(../img/fondo\ inicio_waifu2x_art_noise3_scale_AI\ Extender.jpg)
+                no-repeat center center/cover;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
@@ -16,11 +17,9 @@ body {
 
 .container {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 100%;
-    width: auto;
     padding: 10px;
 }
 
@@ -34,7 +33,6 @@ hr {
 h1 {
     font-family: "Kaushan Script", cursive;
     font-weight: 400;
-    font-style: normal;
     font-size: 50px;
 }
 
@@ -52,7 +50,16 @@ h2 {
     gap: 0.8rem;
 }
 
+/* Wrapper común para cada input + error tooltip */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+/* Estilo base de los inputs */
 .input-field {
+    width: 100%;
     height: 2.6rem;
     padding: 0.75rem;
     font-size: 1rem;
@@ -62,19 +69,19 @@ h2 {
     font-family: "Inter", sans-serif;
 }
 
-/* Wrapper para inputs de contraseña */
+/* Wrapper específico para contraseña (icono) */
 .password-wrapper {
     position: relative;
     width: 100%;
     margin-bottom: 0.8rem;
 }
 
-/* Reservar espacio en el input para el icono */
+/* Reserva espacio para el ícono en el input */
 .password-wrapper .input-field {
     padding-right: 2.5rem;
 }
 
-/* Estilo y posicionamiento del icono */
+/* Ícono de mostrar/ocultar contraseña */
 .password-wrapper .toggle-password {
     position: absolute;
     top: 50%;
@@ -116,14 +123,14 @@ h2 {
     transition: background 0.3s ease;
 }
 
-/* Haz que el form herede el layout de .right_panel */
+/* Hereda layout de .right_panel */
 .right_panel form {
     display: flex;
     flex-direction: column;
-    gap: 2rem;          /* mismo gap que .right_panel */
+    gap: 2rem;
     justify-content: center;
     align-items: center;
-    width: 100%;        /* opcional, si quieres que el form ocupe todo el ancho */
+    width: 100%;
 }
 
 .btn-signup {
@@ -134,25 +141,27 @@ h2 {
 .btn-signup:hover {
     background: #b6b6b6;
 }
-/* Tooltip de error para contraseña */
-.error-tooltip {
-    position: absolute;
-    bottom: -1.6rem;           /* justo debajo del input */
-    left: 0.75rem;             /* mismo padding */
-    background: rgba(220,50,50,0.9);
-    color: #fff;
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateY(0.2rem);
-    transition: opacity 0.2s, transform 0.2s;
-    pointer-events: none;
+
+/* Clase para ocultar tooltips de error */
+.oculto {
+  display: none !important;
 }
 
-/* Mostrar tooltip cuando hay texto */
-.error-tooltip:not(:empty) {
-    opacity: 1;
-    transform: translateY(0);
+/* Estilos base para el tooltip de error */
+.error-tooltip {
+  position: absolute;
+  top: 100%;             /* justo debajo del input */
+  left: 0.75rem;         /* mismo padding que el input */
+  margin-top: 4px;       /* pequeño espacio */
+  background: rgba(220, 50, 50, 0.9);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+  /* se muestra por defecto, 
+     si quieres ocultarlo añade la clase .oculto */
+  display: block;
 }
