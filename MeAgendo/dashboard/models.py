@@ -60,9 +60,13 @@ class Event(models.Model):
         ],
         default="no"
     )
-    start_time  = models.TimeField("Hora desde")
-    end_time    = models.TimeField("Hora hasta")
+    start_time  = models.TimeField("Hora desde", null=True, blank=True)
+    end_time    = models.TimeField("Hora hasta", null=True, blank=True)
     created_at  = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.title} @ {self.date}"
+
+    @property
+    def all_day(self):
+        return self.start_time is None and self.end_time is None

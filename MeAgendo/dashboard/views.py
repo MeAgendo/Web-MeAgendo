@@ -2,7 +2,7 @@
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
-from django.http      import JsonResponse, HttpResponseBadRequest
+from django.http      import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
@@ -18,12 +18,23 @@ def calendar_view(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def task_create_view(request):
+    # GET → envío de contexto vacío para que la plantilla no falle al
+    # leer form_data o error_message
     if request.method == "GET":
-        return render(request, "cuestionario_Nueva_Tarea.html")
+        return render(request,
+                      "cuestionario_Nueva_Tarea.html",
+                      { "form_data": {}, "error_message": None })
 
     data = request.POST
     if not data.get("fecha-limite") or not data.get("titulo") or not data.get("prioridad"):
-        return HttpResponseBadRequest("Faltan datos obligatorios")
+        # re-renderizar con mensaje y datos previos
+        return render(request,
+                      "cuestionario_Nueva_Tarea.html",
+                      {
+                        "error_message": "Faltan datos obligatorios",
+                        "form_data": data
+                      },
+                      status=400)
 
     Task.objects.create(
         user        = request.user,
@@ -42,32 +53,68 @@ def task_create_view(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def event_create_view(request):
+    # GET → plantilla con contexto vacío
     if request.method == "GET":
-        return render(request, "cuestionario_Nuevo_Evento.html")
+        return render(request,
+                      "cuestionario_Nuevo_Evento.html",
+                      { "form_data": {}, "error_message": None })
 
-    data = request.POST
-    # Validar campos obligatorios
-    if (not data.get("fecha-limite") or
-        not data.get("titulo") or
-        not data.get("hora-desde") or
-        not data.get("hora-hasta")):
-        return HttpResponseBadRequest("Faltan datos obligatorios")
+    data        = request.POST
+    fecha       = data.get("fecha-limite", "").strip()
+    titulo      = data.get("titulo", "").strip()
+    start       = data.get("hora-desde", "").strip()
+    end         = data.get("hora-hasta", "").strip()
+    repet       = data.get("repeticion", "no")
+    descripcion = data.get("descripcion", "")
 
-    # Validar orden de horas
-    start = data["hora-desde"]
-    end   = data["hora-hasta"]
-    if start >= end:
-        return HttpResponseBadRequest("La hora de inicio debe ser anterior a la hora de fin")
+    error_message = None
+
+    # 1) Fecha y título obligatorios
+    if not fecha or not titulo:
+        error_message = "Faltan datos obligatorios"
+
+    # 2) Si rellena una hora, debe rellenar la otra
+    elif bool(start) != bool(end):
+        error_message = (
+          "Si defines hora, completa ambos campos; "
+          "si no, déjalos vacíos para evento de Todo el día"
+        )
+
+    # 3) Si ambas existen, start < end
+    elif start and end and start >= end:
+        error_message = "La hora de inicio debe ser anterior a la hora de fin"
+
+    # Si hubo error → re-render al formulario con contexto
+    if error_message:
+        return render(request,
+                      "cuestionario_Nuevo_Evento.html",
+                      {
+                        "error_message": error_message,
+                        "form_data": {
+                          "fecha-limite": fecha,
+                          "titulo":       titulo,
+                          "descripcion":  descripcion,
+                          "repeticion":   repet,
+                          "hora-desde":   start,
+                          "hora-hasta":   end,
+                        }
+                      },
+                      status=400)
+
+    # Si no definió horas → evento “Todo el día”
+    start_time = start or None
+    end_time   = end   or None
 
     Event.objects.create(
         user        = request.user,
-        date        = data["fecha-limite"],
-        title       = data["titulo"],
-        description = data.get("descripcion", ""),
-        repetition  = data.get("repeticion", "no"),
-        start_time  = start,
-        end_time    = end,
+        date        = fecha,
+        title       = titulo,
+        description = descripcion,
+        repetition  = repet,
+        start_time  = start_time,
+        end_time    = end_time,
     )
+
     return render(request, "success_iframe.html", {
         "message": "Evento creado correctamente"
     })
