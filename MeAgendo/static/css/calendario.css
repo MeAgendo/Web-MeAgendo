@@ -87,48 +87,92 @@ a{
     flex: 1;
     gap: 0.2rem;
 }
+/* 1. Panel general */
 .left-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 18%;
-    background-color: #f4f4f4;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  width: 240px;                   /* ancho fijo */
+  height: 100vh;                  /* toda la altura */
+  padding: 1.5rem 1rem 3rem;      /* más padding-bottom para separar logout */
+  background-color: #fafafa;      /* ligero contraste */
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
 }
-.left-panel h1{
-    align-self: flex-start;
-    margin: 0;
-    padding: 20px 15px;
-    font-size: 30px;
+
+/* 2. Título / logo */
+.left-panel h1 {
+  margin: 0 0 1.5rem 0;           /* separa del nav */
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
 }
+
+/* 3. Navegación */
 .left-panel nav {
-    display: flex;
-    
-    width: 95%;
-    background-color: aqua;
-    text-align: center;
-    justify-content: center;
+  flex: 0 0 auto;
+  margin-bottom: 2rem;            /* espacio antes del logout */
 }
+
 .left-panel nav ul {
-    width: 100%;
-    list-style: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.left-panel nav ul li{
-    border-radius: 4px;
-    background-color: #968f8f;
-    
-    
+
+.left-panel nav ul li {
+  margin-bottom: 0.75rem;         /* espacio entre items */
 }
-.left-panel a {
-    box-sizing: border-box;
-    margin-top: auto; 
-    align-self: center;
-    text-decoration: none;
-    padding: 0 10px;
-    border-radius: 4px;
-    background-color: #968f8f;
+
+.left-panel nav ul li:last-child {
+  margin-bottom: 0;
 }
+
+.left-panel nav ul a {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #555;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+}
+
+.left-panel nav ul a:hover {
+  background-color: #4A90E2;      /* color de acento */
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* 4. Active link */
+.left-panel nav ul a.active {
+  background-color: #4A90E2;
+  color: #fff;
+  box-shadow: inset 3px 0 0 #F5A623, 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* 5. Cerrar sesión */
+.left-panel .logout-btn {
+  margin-top: auto;              
+  display: block;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  background-color: #c7c5c5;      /* rojo suave */
+  color: #555;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.left-panel .logout-btn:hover {
+  box-shadow: 0 0px 10px #d64541;
+  color: #ce3e3e;
+}
+
+
 main {
     height: 100%;
     width: 70%;
@@ -211,6 +255,7 @@ main header ul li {
     color: #333;
     padding: 0.5rem 1rem;
     border-radius: 10px;             /* forma “píldora” */
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
     cursor: pointer;
 }
 
@@ -337,6 +382,7 @@ main header ul li:hover {
     justify-content: flex-start;
     padding: 4px;
     border: 1px solid #ccc;
+    border-radius: 8px;
     box-sizing: border-box;
     cursor: pointer;
 }
@@ -357,7 +403,7 @@ main header ul li:hover {
     flex: content;
     height: auto;
     width: auto;
-    background: #4a90e2;
+    background: #509bf1;
     color: #fff;
     font-weight: bold;
     align-items: flex-start;
@@ -419,7 +465,7 @@ main header ul li:hover {
 
 .right-panel .main-header .search-box input:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: #509bf1;
     box-shadow: 0 0 3px rgba(74,144,226,0.5);
 }
 

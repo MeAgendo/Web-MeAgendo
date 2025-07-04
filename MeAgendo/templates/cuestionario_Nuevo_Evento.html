@@ -25,6 +25,8 @@
     rel="stylesheet"
     href="{% static 'css/cuestionario_evento.css' %}"
   >
+  <script src="{% static 'js/event_form.js' %}"></script>
+
 </head>
 <body>
   <div class="container nuevo-evento-page">
@@ -41,7 +43,7 @@
     <form method="post" class="ne-form">
       {% csrf_token %}
 
-      <!-- Fecha límite -->
+      <!-- Fecha -->
       <div class="ne-form-group">
         <label for="fecha-limite" class="ne-label">
           <i class="fas fa-calendar-alt ne-icon"></i>
@@ -53,6 +55,7 @@
           name="fecha-limite"
           class="ne-input"
           required
+          value="{{ form_data.fecha_limite|default:'' }}"
         />
       </div>
 
@@ -66,6 +69,7 @@
           class="ne-input"
           placeholder="Escribe un título"
           required
+          value="{{ form_data.titulo|default:'' }}"
         />
       </div>
 
@@ -81,7 +85,7 @@
           class="ne-textarea"
           rows="3"
           placeholder="Escribe una descripción"
-        ></textarea>
+        >{{ form_data.descripcion|default:'' }}</textarea>
       </div>
 
       <!-- Repetición -->
@@ -90,23 +94,19 @@
           <i class="fas fa-redo ne-icon"></i>
           Repetición
         </label>
-        <select
-          id="repeticion"
-          name="repeticion"
-          class="ne-select"
-        >
-          <option value="no">No recurrente</option>
-          <option value="diario">Diario</option>
-          <option value="semanal">Semanal</option>
-          <option value="mensual">Mensual</option>
+        <select id="repeticion" name="repeticion" class="ne-select">
+          <option value="no"      {% if form_data.repeticion == 'no'      %}selected{% endif %}>No recurrente</option>
+          <option value="diario"  {% if form_data.repeticion == 'diario'  %}selected{% endif %}>Diario</option>
+          <option value="semanal" {% if form_data.repeticion == 'semanal' %}selected{% endif %}>Semanal</option>
+          <option value="mensual" {% if form_data.repeticion == 'mensual' %}selected{% endif %}>Mensual</option>
         </select>
       </div>
 
-      <!-- Plazo de tiempo -->
+      <!-- Horas (opcional) -->
       <div class="ne-form-group ne-time-range">
         <label class="ne-label">
           <i class="fas fa-clock ne-icon"></i>
-          Horario
+          Horario (opcional)
         </label>
         <div class="ne-time-fields">
           <div class="ne-time-field">
@@ -116,7 +116,7 @@
               id="hora-desde"
               name="hora-desde"
               class="ne-input"
-              required
+              value="{{ form_data.hora_desde|default:'' }}"
             />
           </div>
           <div class="ne-time-field">
@@ -126,15 +126,16 @@
               id="hora-hasta"
               name="hora-hasta"
               class="ne-input"
-              required
+              value="{{ form_data.hora_hasta|default:'' }}"
             />
           </div>
         </div>
       </div>
-
-      <!-- Mensaje de error de horario -->
-      <div id="time-error" class="ne-error-message"></div>
-
+      <div
+        id="client-error"
+        class="ne-error-message oculto"
+        style="visibility:hidden; margin-bottom:1rem; text-align:center;"
+      ></div>
       <!-- Botón Crear -->
       <div class="ne-form-group ne-submit-group">
         <button type="submit" class="ne-btn-crear">CREAR</button>
