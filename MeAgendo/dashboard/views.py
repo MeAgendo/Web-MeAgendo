@@ -2,7 +2,7 @@
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http      import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
@@ -25,11 +25,12 @@ def task_create_view(request):
                       {"form_data": {}, "error_message": None})
 
     data = request.POST
-    # validar fecha-inicio, fecha-limite, título y prioridad
+    # validar fecha-inicio, fecha-limite, título, prioridad y duración de sesión
     if (not data.get("fecha-inicio") or
         not data.get("fecha-limite") or
         not data.get("titulo") or
-        not data.get("prioridad")):
+        not data.get("prioridad") or
+        not data.get("duracion-sesion")):
         return render(request,
                       "cuestionario_Nueva_Tarea.html",
                       {
@@ -38,14 +39,15 @@ def task_create_view(request):
                       },
                       status=400)
 
-    # crear Task usando los nuevos campos y sin time_window
+    # crear Task usando los nuevos campos y session_length
     Task.objects.create(
-        user        = request.user,
-        start_date  = data["fecha-inicio"],
-        due_date    = data["fecha-limite"],
-        title       = data["titulo"],
-        description = data.get("descripcion", ""),
-        priority    = data["prioridad"],
+        user           = request.user,
+        start_date     = data["fecha-inicio"],
+        due_date       = data["fecha-limite"],
+        title          = data["titulo"],
+        description    = data.get("descripcion", ""),
+        priority       = data["prioridad"],
+        session_length = int(data["duracion-sesion"]),
     )
 
     return render(request,
@@ -128,11 +130,11 @@ def event_create_view(request):
 def tasks_api(request):
     qs = Task.objects.filter(user=request.user)
     data = [{
-        "id":           t.id,
-        "title":        t.title,
-        "start":        t.start_date.isoformat() if t.start_date else None,
-        "due":          t.due_date.isoformat()   if t.due_date   else None,
-        "progress":     t.progress,
+        "id":             t.id,
+        "title":          t.title,
+        "start":          t.start_date.isoformat() if t.start_date else None,
+        "due":            t.due_date.isoformat()   if t.due_date   else None,
+        "progress":       t.progress,
         "auto_scheduled": t.auto_scheduled,
     } for t in qs]
     return JsonResponse(data, safe=False)
@@ -146,10 +148,12 @@ def events_api(request):
         start = e.start_time.strftime("%H:%M") if e.start_time else ""
         end   = e.end_time.strftime("%H:%M")   if e.end_time   else ""
         data.append({
-            "id":    e.id,
-            "title": e.title,
-            "date":  e.date.isoformat(),
-            "start": start,
-            "end":   end
+            "id":       e.id,
+            "title":    e.title,
+            "date":     e.date.isoformat(),
+            "start":    start,
+            "end":      end,
+            "task_id":  e.related_task.id if e.related_task else None,
+            "status":   e.status,
         })
     return JsonResponse(data, safe=False)
