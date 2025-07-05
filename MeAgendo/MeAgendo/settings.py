@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'accounts',
     'password_reset',
     'dashboard',
+    'autoscheduler.apps.AutoschedulerConfig',
 ]
 
 MIDDLEWARE = [
