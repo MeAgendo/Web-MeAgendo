@@ -1,57 +1,79 @@
-# autoscheduler/planner.py
-
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
+from django.conf      import settings
 from dashboard.models import Task, Event
 
 def generate_sessions_for_task(task):
     if task.auto_scheduled:
         return
 
-    # Refetch para tener tipos correctos
     task = Task.objects.get(pk=task.pk)
-    start = task.start_date
-    end   = task.due_date
-
-    # Necesitamos al menos 1 día entero entre start y end
-    days_between = (end - start).days
-    if not start or not end or days_between < 2:
+    start_date, end_date = task.start_date, task.due_date
+    if not start_date or not end_date or start_date > end_date:
         return
 
-    # Bloques diarios según prioridad
-    blocks_per_day = {
-        'alta':  3,
-        'media': 2,
-        'baja':  1,
-    }[task.priority]
+    cfg            = settings.AUTOSCHEDULER
+    freq_days      = cfg["PRIORITY_FREQUENCY_DAYS"].get(task.priority, 1)
+    skip_weekends  = cfg["SKIP_WEEKENDS"]
+    work_start, work_end = cfg["WORKING_HOURS"]
+    session_len    = min(task.session_length, cfg["MAX_SESSION_LENGTH"])
+    min_break      = timedelta(minutes=cfg["MIN_BREAK_MINUTES"])
 
-    # Duración de sesión en timedelta
-    session_td = timedelta(hours=task.session_length)
-    # Descanso entre sesiones (por ejemplo 15 minutos)
-    break_td   = timedelta(minutes=15)
+    # Recorremos fechas desde start_date hasta end_date, con paso frequency_days
+    current = start_date
+    while current <= end_date:
+        # Omitir fin de semana si corresponde
+        if not (skip_weekends and current.weekday() >= 5):
+            # Intentar reservar una sesión en este día
+            _schedule_one_session(task, current,
+                                  work_start, work_end,
+                                  session_len, min_break)
+        current += timedelta(days=freq_days)
 
-    # Generar un solo evento por día (días intermedios)
-    for offset in range(1, days_between):
-        date_ = start + timedelta(days=offset)
-
-        # Hora de inicio base: 09:00
-        start_dt = datetime.combine(date_, datetime.min.time()) + timedelta(hours=9)
-
-        # Duración total del bloque (sesiones + descansos)
-        total_td = blocks_per_day * session_td \
-                   + (blocks_per_day - 1) * break_td
-
-        end_dt = start_dt + total_td
-
-        # Crear evento agrupado
-        Event.objects.create(
-            user         = task.user,
-            date         = date_,
-            start_time   = start_dt.time(),
-            end_time     = end_dt.time(),
-            title        = f"Sprint múltiple: {task.title}",
-            related_task = task
-        )
-
-    # Marcar como auto-agendada
     task.auto_scheduled = True
     task.save(update_fields=['auto_scheduled'])
+
+
+def _schedule_one_session(task, session_day,
+                          work_start, work_end,
+                          session_hours, min_break):
+    """
+    Busca el primer hueco libre en el día laboral [work_start–work_end]
+    para una sesión de session_hours horas, sin chocar con otros eventos.
+    """
+    desired = timedelta(hours=session_hours)
+    cursor = datetime.combine(session_day, time(hour=work_start))
+
+    end_of_day = datetime.combine(session_day, time(hour=work_end))
+
+    while cursor + timedelta(minutes=30) <= end_of_day:
+        slot_end = cursor + desired
+        # Ajustar si sobrepasa jornada
+        if slot_end > end_of_day:
+            slot_end = end_of_day
+            # Si sobra menos de 30 min, salimos
+            if (slot_end - cursor) < timedelta(minutes=30):
+                break
+
+        # Comprobar conflictos
+        conflict = Event.objects.filter(
+            user=task.user,
+            date=session_day,
+            start_time__lt=slot_end.time(),
+            end_time__gt=cursor.time()
+        ).exists()
+
+        if not conflict:
+            # Crear sesión
+            Event.objects.create(
+                user         = task.user,
+                date         = session_day,
+                start_time   = cursor.time(),
+                end_time     = slot_end.time(),
+                title        = f"Sprint: {task.title}",
+                related_task = task
+            )
+            return
+
+        # Avanzar cursor: al final del evento conflictivo o +min_break
+        # Simplificación: sumamos session_hours + min_break
+        cursor = cursor + desired + min_break
