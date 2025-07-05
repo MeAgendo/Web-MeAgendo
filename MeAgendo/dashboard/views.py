@@ -2,7 +2,7 @@
 
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.shortcuts import render
-from django.http      import JsonResponse
+from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
@@ -18,16 +18,18 @@ def calendar_view(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def task_create_view(request):
-    # GET → envío de contexto vacío para que la plantilla no falle al
-    # leer form_data o error_message
+    # GET → formulario vacío
     if request.method == "GET":
         return render(request,
                       "cuestionario_Nueva_Tarea.html",
-                      { "form_data": {}, "error_message": None })
+                      {"form_data": {}, "error_message": None})
 
     data = request.POST
-    if not data.get("fecha-limite") or not data.get("titulo") or not data.get("prioridad"):
-        # re-renderizar con mensaje y datos previos
+    # validar fecha-inicio, fecha-limite, título y prioridad
+    if (not data.get("fecha-inicio") or
+        not data.get("fecha-limite") or
+        not data.get("titulo") or
+        not data.get("prioridad")):
         return render(request,
                       "cuestionario_Nueva_Tarea.html",
                       {
@@ -36,28 +38,30 @@ def task_create_view(request):
                       },
                       status=400)
 
+    # crear Task usando los nuevos campos y sin time_window
     Task.objects.create(
         user        = request.user,
+        start_date  = data["fecha-inicio"],
         due_date    = data["fecha-limite"],
         title       = data["titulo"],
         description = data.get("descripcion", ""),
-        time_window = data.get("plazo-tiempo", ""),
         priority    = data["prioridad"],
     )
-    return render(request, "success_iframe.html", {
-        "message": "Tarea creada correctamente"
-    })
+
+    return render(request,
+                  "success_iframe.html",
+                  {"message": "Tarea creada correctamente"})
 
 
 @xframe_options_exempt
 @login_required
 @require_http_methods(["GET", "POST"])
 def event_create_view(request):
-    # GET → plantilla con contexto vacío
+    # GET → formulario vacío
     if request.method == "GET":
         return render(request,
-                      "cuestionario_Nuevo_Evento.html",
-                      { "form_data": {}, "error_message": None })
+                      "cuestionario_Nueva_Evento.html",
+                      {"form_data": {}, "error_message": None})
 
     data        = request.POST
     fecha       = data.get("fecha-limite", "").strip()
@@ -84,10 +88,10 @@ def event_create_view(request):
     elif start and end and start >= end:
         error_message = "La hora de inicio debe ser anterior a la hora de fin"
 
-    # Si hubo error → re-render al formulario con contexto
+    # re-render si hay error
     if error_message:
         return render(request,
-                      "cuestionario_Nuevo_Evento.html",
+                      "cuestionario_Nueva_Evento.html",
                       {
                         "error_message": error_message,
                         "form_data": {
@@ -101,7 +105,7 @@ def event_create_view(request):
                       },
                       status=400)
 
-    # Si no definió horas → evento “Todo el día”
+    # si no definió horas → all-day event
     start_time = start or None
     end_time   = end   or None
 
@@ -115,19 +119,21 @@ def event_create_view(request):
         end_time    = end_time,
     )
 
-    return render(request, "success_iframe.html", {
-        "message": "Evento creado correctamente"
-    })
+    return render(request,
+                  "success_iframe.html",
+                  {"message": "Evento creado correctamente"})
 
 
 @login_required
 def tasks_api(request):
     qs = Task.objects.filter(user=request.user)
     data = [{
-        "id":       t.id,
-        "title":    t.title,
-        "due":      t.due_date.isoformat(),
-        "progress": getattr(t, "progress", 0)
+        "id":           t.id,
+        "title":        t.title,
+        "start":        t.start_date.isoformat() if t.start_date else None,
+        "due":          t.due_date.isoformat()   if t.due_date   else None,
+        "progress":     t.progress,
+        "auto_scheduled": t.auto_scheduled,
     } for t in qs]
     return JsonResponse(data, safe=False)
 
