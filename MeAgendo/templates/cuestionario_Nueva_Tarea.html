@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nueva Tarea</title>
 
+  <!-- Script que permite abrir el selector con clic en cualquier zona del campo -->
+  <script src="{% static 'js/openDatePicker.js' %}"></script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +31,6 @@
 </head>
 <body>
   <div class="container nueva-tarea-page">
-
     <!-- Header -->
     <header class="nt-header">
       <button type="button" class="nt-close-btn">
@@ -40,6 +42,21 @@
     <!-- Formulario -->
     <form method="post" class="nt-form">
       {% csrf_token %}
+
+      <!-- Fecha de inicio -->
+      <div class="nt-form-group">
+        <label for="fecha-inicio" class="nt-label">
+          <i class="fas fa-play-circle nt-icon"></i>
+          Fecha de inicio
+        </label>
+        <input
+          type="date"
+          id="fecha-inicio"
+          name="fecha-inicio"
+          class="nt-input"
+          required
+        />
+      </div>
 
       <!-- Fecha límite -->
       <div class="nt-form-group">
@@ -83,25 +100,6 @@
           rows="3"
           placeholder="Escribe una descripción"
         ></textarea>
-      </div>
-
-      <!-- Plazo de tiempo -->
-      <div class="nt-form-group">
-        <label for="plazo-tiempo" class="nt-label">
-          <i class="fas fa-hourglass-half nt-icon"></i>
-          Plazo de tiempo
-        </label>
-        <select
-          id="plazo-tiempo"
-          name="plazo-tiempo"
-          class="nt-select"
-          required
-        >
-          <option value="">Seleccionar</option>
-          <option value="hoy">Hoy</option>
-          <option value="semana">Esta semana</option>
-          <option value="mes">Este mes</option>
-        </select>
       </div>
 
       <!-- Prioridad -->

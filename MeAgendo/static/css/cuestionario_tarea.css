@@ -67,6 +67,7 @@ body {
     padding: 10px;
     color: #fff;
     font-size: 15px;
+    color-scheme: dark;
 }
 
 .nt-input::placeholder,
