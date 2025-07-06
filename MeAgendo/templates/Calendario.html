@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MeAgendo - Calendario</title>
@@ -16,6 +17,9 @@
   <!-- CSS propio -->
   <link rel="stylesheet" href="{% static 'css/calendario.css' %}">
   <link rel="stylesheet" href="{% static 'css/info_section.css' %}">
+
+  <!-- CSS de utilidades (clase .oculto) -->
+  <link rel="stylesheet" href="{% static 'css/util.css' %}">
   
   <!-- Inyección de URLs Django para JS -->
   <script>
@@ -26,11 +30,11 @@
   </script>
 
   <!-- JS propios -->
-  <script src="{% static 'js/calendario-sync.js'       %}"></script>
-  <script src="{% static 'js/calendar-api.js'        %}"></script>
-  <script src="{% static 'js/calendar-render.js'     %}"></script>
-  <script src="{% static 'js/calendar-ui.js'         %}"></script>
-  <script src="{% static 'js/formulario_dinamico.js' %}"></script>
+  <script src="{% static 'js/calendario-sync.js'       %}" defer></script>
+  <script src="{% static 'js/calendar-api.js'        %}" defer></script>
+  <script src="{% static 'js/calendar-render.js'     %}" defer></script>
+  <script src="{% static 'js/calendar-ui.js'         %}" defer></script>
+  <script src="{% static 'js/formulario_dinamico.js' %}" defer></script>
 
 </head>
 <body>
@@ -39,8 +43,8 @@
       <h1 class="Nombre-web">MeAgendo</h1>
       <nav>
         <ul>
-          <li><a href="#">Calendario</a></li>
-          <li><a href="#">Configuración</a></li>
+          <li><a href="#" id="navCalendar">Calendario</a></li>
+          <li><a href="#" id="navSettings">Configuración</a></li>
         </ul>
       </nav>
       <a href="{% url 'accounts:logout' %}" class="logout-btn">
@@ -101,7 +105,15 @@
             </ul>
           </div>
         </section>
+      </div> <!-- cierre de .calendar-container -->
+              
+      <!-- Contenedor para Configuración -->
+      <div class="config-container oculto" aria-hidden="true">
+        <ul id="settingsList">
+          <!-- Aquí JS insertará cada ítem de configuración -->
+        </ul>
       </div>
+    
     </main>
 
     <aside class="right-panel">
@@ -153,5 +165,8 @@
       </div>
     </aside>
   </div>
+
+   <!-- Otros scripts… -->
+  <script src="{% static 'js/navbar-toggle.js' %}"></script>
 </body>
 </html>
