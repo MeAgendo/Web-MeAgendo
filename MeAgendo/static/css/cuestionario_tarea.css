@@ -48,6 +48,7 @@ body {
     flex-direction: column;
 }
 
+/* Etiquetas y campos */
 .nt-label {
     font-size: 14px;
     margin-bottom: 8px;
@@ -57,7 +58,6 @@ body {
     color: #ddd;
 }
 
-/* Inputs y selects */
 .nt-input,
 .nt-textarea,
 .nt-select {
@@ -75,13 +75,12 @@ body {
     color: #aaa;
 }
 
-/* Textarea específico */
 .nt-textarea {
     resize: none;
     min-height: 80px;
 }
 
-/* Grupo de prioridad */
+/* Prioridad */
 .nt-prioridad-options {
     display: flex;
     justify-content: space-between;
@@ -101,8 +100,20 @@ body {
     transform: scale(1.1);
 }
 
-/* Botón crear */
-.nt-btn-crear {
+/* Grupo de botones */
+.nt-submit-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* Botones Crear y Eliminar */
+.nt-btn-crear,
+.nt-btn-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: #fff;
     color: #222;
     padding: 10px 20px;
@@ -114,6 +125,12 @@ body {
     transition: background-color 0.2s ease;
 }
 
-.nt-btn-crear:hover {
+.nt-btn-crear:hover,
+.nt-btn-eliminar:hover {
     background-color: #f0f0f0;
+}
+
+/* Asegura posicionamiento para errores si usas mensajes en el form */
+form.nt-form {
+    position: relative;
 }
