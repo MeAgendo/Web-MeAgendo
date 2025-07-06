@@ -62,7 +62,7 @@ def event_create_view(request):
     # GET → formulario vacío
     if request.method == "GET":
         return render(request,
-                      "cuestionario_Nueva_Evento.html",
+                      "cuestionario_Nuevo_Evento.html",
                       {"form_data": {}, "error_message": None})
 
     data        = request.POST
@@ -93,7 +93,7 @@ def event_create_view(request):
     # re-render si hay error
     if error_message:
         return render(request,
-                      "cuestionario_Nueva_Evento.html",
+                      "cuestionario_Nuevo_Evento.html",
                       {
                         "error_message": error_message,
                         "form_data": {
