@@ -112,24 +112,35 @@ DEFAULT_FROM_EMAIL = os.getenv(
     'DEFAULT_FROM_EMAIL',
     'MeAgendo <no-reply@meagendo.com>'
 )
+# settings.py
+
+# settings.py
+
 AUTOSCHEDULER = {
     # Frecuencia en días entre sesiones según prioridad
-    # “cada 1 día” → diario; “cada 3 días” → interdiario
     "PRIORITY_FREQUENCY_DAYS": {
-        "alta":  1,   # cada día
-        "media": 3,   # cada 3 días
-        "baja":  7,   # cada semana
+        "alta":  1,  # diario
+        "media": 2,  # cada 2 días
+        "baja":  3,  # cada 3 días
     },
-
-    # Horario laboral (inicio, fin)
-    "WORKING_HOURS": (9, 18),
-
-    # Si saltar fines de semana
+    "MAX_SESSIONS_PER_DAY": 2,
+    # ¿Saltar fines de semana?
     "SKIP_WEEKENDS": True,
 
-    # Duración máxima de sesión (horas)
+    # Horario laboral: (hora_inicio, hora_fin)
+    "WORKING_HOURS": (9, 18),
+
+    # Duración máxima de cada sesión (en horas)
     "MAX_SESSION_LENGTH": 4,
 
-    # Duración de descanso mínimo al buscar hueco (minutos)
-    "MIN_BREAK_MINUTES": 15,
+    # Descanso mínimo entre huecos/agendados (en minutos)
+    "MIN_BREAK_MINUTES": 30,
+
+    # Tope invisible de horas a programar según prioridad
+    "TOTAL_HOURS_PER_PRIORITY": {
+        "alta":  8,  # máximo 8 h
+        "media": 4,  # máximo 4 h
+        "baja":  2,  # máximo 2 h
+    },
 }
+

@@ -4,62 +4,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuevo Evento</title>
+  <title>{% if is_edit %}Editar Evento{% else %}Nuevo Evento{% endif %}</title>
+
   <script src="{% static 'js/openDatePicker.js' %}"></script>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Kaushan+Script&display=swap"
     rel="stylesheet"
   >
-
-  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
   >
-
-  <!-- CSS propio -->
   <link
     rel="stylesheet"
     href="{% static 'css/cuestionario_evento.css' %}"
   >
   <script src="{% static 'js/event_form.js' %}"></script>
-
 </head>
 <body>
   <div class="container nuevo-evento-page">
 
-    <!-- Header -->
     <header class="ne-header">
       <button type="button" class="ne-close-btn">
         <i class="fas fa-arrow-left"></i>
       </button>
-      <h1 class="ne-title">Nuevo Evento</h1>
+      <h1 class="ne-title">
+        {% if is_edit %}Editar Evento{% else %}Nuevo Evento{% endif %}
+      </h1>
     </header>
 
-    <!-- Formulario Nuevo Evento -->
-    <form method="post" class="ne-form">
+    <form method="post" action="" class="ne-form">
       {% csrf_token %}
 
-      <!-- Fecha -->
       <div class="ne-form-group">
-        <label for="fecha-limite" class="ne-label">
+        <label for="fecha_limite" class="ne-label">
           <i class="fas fa-calendar-alt ne-icon"></i>
           Fecha
         </label>
         <input
           type="date"
-          id="fecha-limite"
-          name="fecha-limite"
+          id="fecha_limite"
+          name="fecha_limite"
           class="ne-input"
           required
           value="{{ form_data.fecha_limite|default:'' }}"
         />
       </div>
 
-      <!-- Título -->
       <div class="ne-form-group">
         <label for="titulo" class="ne-label">Agregar título</label>
         <input
@@ -73,7 +66,6 @@
         />
       </div>
 
-      <!-- Descripción -->
       <div class="ne-form-group">
         <label for="descripcion" class="ne-label">
           <i class="fas fa-align-left ne-icon"></i>
@@ -88,7 +80,6 @@
         >{{ form_data.descripcion|default:'' }}</textarea>
       </div>
 
-      <!-- Repetición -->
       <div class="ne-form-group">
         <label for="repeticion" class="ne-label">
           <i class="fas fa-redo ne-icon"></i>
@@ -102,7 +93,6 @@
         </select>
       </div>
 
-      <!-- Horas (opcional) -->
       <div class="ne-form-group ne-time-range">
         <label class="ne-label">
           <i class="fas fa-clock ne-icon"></i>
@@ -113,8 +103,8 @@
             <span class="ne-time-label">Desde</span>
             <input
               type="time"
-              id="hora-desde"
-              name="hora-desde"
+              id="hora_desde"
+              name="hora_desde"
               class="ne-input"
               value="{{ form_data.hora_desde|default:'' }}"
             />
@@ -123,22 +113,34 @@
             <span class="ne-time-label">Hasta</span>
             <input
               type="time"
-              id="hora-hasta"
-              name="hora-hasta"
+              id="hora_hasta"
+              name="hora_hasta"
               class="ne-input"
               value="{{ form_data.hora_hasta|default:'' }}"
             />
           </div>
         </div>
       </div>
+
       <div
         id="client-error"
         class="ne-error-message oculto"
         style="visibility:hidden; margin-bottom:1rem; text-align:center;"
       ></div>
-      <!-- Botón Crear -->
+
       <div class="ne-form-group ne-submit-group">
-        <button type="submit" class="ne-btn-crear">CREAR</button>
+        <button type="submit" class="ne-btn-crear">
+          {% if is_edit %}Guardar cambios{% else %}CREAR{% endif %}
+        </button>
+
+        {% if is_edit %}
+          <button
+            type="button"
+            id="delete-btn"
+            data-delete-url="{% url 'dashboard:event_delete' form_data.id %}"
+            class="ne-btn-eliminar"
+          >ELIMINAR</button>
+        {% endif %}
       </div>
     </form>
 
