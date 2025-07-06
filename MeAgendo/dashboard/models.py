@@ -32,6 +32,11 @@ class Task(models.Model):
         ],
         default="media"
     )
+    session_length = models.PositiveIntegerField(
+        "Duración de sesión (horas)",
+        default=1,
+        help_text="Horas por bloque de trabajo generado automáticamente"
+    )
     progress     = models.PositiveIntegerField(
         "Progreso (%)",
         default=0,

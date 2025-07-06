@@ -112,3 +112,24 @@ DEFAULT_FROM_EMAIL = os.getenv(
     'DEFAULT_FROM_EMAIL',
     'MeAgendo <no-reply@meagendo.com>'
 )
+AUTOSCHEDULER = {
+    # Frecuencia en días entre sesiones según prioridad
+    # “cada 1 día” → diario; “cada 3 días” → interdiario
+    "PRIORITY_FREQUENCY_DAYS": {
+        "alta":  1,   # cada día
+        "media": 3,   # cada 3 días
+        "baja":  7,   # cada semana
+    },
+
+    # Horario laboral (inicio, fin)
+    "WORKING_HOURS": (9, 18),
+
+    # Si saltar fines de semana
+    "SKIP_WEEKENDS": True,
+
+    # Duración máxima de sesión (horas)
+    "MAX_SESSION_LENGTH": 4,
+
+    # Duración de descanso mínimo al buscar hueco (minutos)
+    "MIN_BREAK_MINUTES": 15,
+}

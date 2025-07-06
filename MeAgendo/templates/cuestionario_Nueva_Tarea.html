@@ -54,6 +54,7 @@
           id="fecha-inicio"
           name="fecha-inicio"
           class="nt-input"
+          value="{{ form_data.start_date|default:'' }}"
           required
         />
       </div>
@@ -70,6 +71,7 @@
           name="fecha-limite"
           class="nt-input"
           placeholder="dd/mm/aaaa"
+          value="{{ form_data.due_date|default:'' }}"
           required
         />
       </div>
@@ -83,6 +85,7 @@
           name="titulo"
           class="nt-input"
           placeholder="Escribe un título"
+          value="{{ form_data.titulo|default:'' }}"
           required
         />
       </div>
@@ -99,7 +102,25 @@
           class="nt-textarea"
           rows="3"
           placeholder="Escribe una descripción"
-        ></textarea>
+        >{{ form_data.descripcion|default:'' }}</textarea>
+      </div>
+
+      <!-- Duración de sesión -->
+      <div class="nt-form-group">
+        <label for="duracion-sesion" class="nt-label">
+          <i class="fas fa-clock nt-icon"></i>
+          Duración de sesión (horas)
+        </label>
+        <input
+          type="number"
+          id="duracion-sesion"
+          name="duracion-sesion"
+          class="nt-input"
+          min="1"
+          max="4"
+          value="{{ form_data.session_length|default:1 }}"
+          required
+        />
       </div>
 
       <!-- Prioridad -->
@@ -111,6 +132,7 @@
             id="prioridad-alta"
             name="prioridad"
             value="alta"
+            {% if form_data.prioridad == 'alta' %}checked{% endif %}
             required
           />
           <label for="prioridad-alta" class="nt-prioridad-label">Alta</label>
@@ -120,6 +142,7 @@
             id="prioridad-media"
             name="prioridad"
             value="media"
+            {% if form_data.prioridad == 'media' %}checked{% endif %}
           />
           <label for="prioridad-media" class="nt-prioridad-label">Media</label>
 
@@ -128,6 +151,7 @@
             id="prioridad-baja"
             name="prioridad"
             value="baja"
+            {% if form_data.prioridad == 'baja' %}checked{% endif %}
           />
           <label for="prioridad-baja" class="nt-prioridad-label">Baja</label>
         </div>
