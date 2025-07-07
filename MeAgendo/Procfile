@@ -1,1 +1,0 @@
-web: gunicorn MeAgendo.wsgi --log-file -
